@@ -1,0 +1,37 @@
+{% extends 'accounts/base.html' %}
+{% block pagetitle %} Login {% endblock %}
+{% load static %}
+{% block content %}
+<div class="card-body" style="width: 80%;">
+    <div class="main-signup-header">
+        <!-- handle alert messages -->
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            {{message}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endfor %}
+        {% endif %}
+        <h2>Welcome back!</h2>
+        <h5 class="fw-semibold mb-4">Please Login to Proceed.</h5>
+        <form action="" method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="index_number">Index Number</label>
+                <input class="form-control" id="index_number" name="index_number" placeholder="Enter index_number"
+                    type="text" required>
+            </div>
+            <div class="form-group">
+                <label for="pin">Pin</label>
+                <input class="form-control" id="pin" name="pin" placeholder="Enter your pin" type="password" required>
+            </div>
+            <button class="btn btn-main-primary btn-block" type="submit">Login</button>
+            <button class="btn btn-main-primary btn-block" type="clear">Clear</button>
+        </form>
+    </div>
+</div>
+<!-- NOTE ENDS -->
+{% endblock %}
