@@ -4,7 +4,15 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 
 
+class LandingPageView(View):
+    template = 'accounts/landing_page.html'
+
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template, {})
+
+
 class LoginView(View):
+    '''Implements login functionality'''
     template = 'accounts/login.html'
 
     def get(self, request, *args, **kwargs):
@@ -13,11 +21,15 @@ class LoginView(View):
     def post(self, request, *args, **kwargs):
         index_number = request.POST.get('index_number')
         pin = request.POST.get('pin')
-        user = authenticate(index_number=index_number, pin=pin)
+        user = authenticate(index_number=index_number, password=pin)
         if user:
             login(request, user)
-            messages.success(request, 'Login successful')
-            return redirect('backend:index')
+            if user.is_student:
+                messages.success(request, 'Login successful')
+                return redirect('voting:landing_page')
+            elif user.is_staff or user.is_superuser:
+                messages.success(request, 'Login successful')
+                return redirect('backend:index')
         else:
             messages.error(request, 'Login failed')
             return redirect('accounts:login')
