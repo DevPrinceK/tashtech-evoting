@@ -15,5 +15,6 @@ class AccountManager(BaseUserManager):
         user = self.create_user(index_number=index_number, password=password, **kwargs)  # noqa
         user.is_superuser = True
         user.is_staff = True
+        user.is_student = False
         user.save()
         return user
