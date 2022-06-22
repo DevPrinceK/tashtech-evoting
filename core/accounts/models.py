@@ -11,6 +11,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     user_class = models.CharField(max_length=20, null=True, blank=True)
     is_student = models.BooleanField(default=False)
     is_done_voting = models.BooleanField(default=False)
+    # for monitoring voters' voting.
+    voted_for_sp = models.BooleanField(default=False)
+    voted_for_gp = models.BooleanField(default=False)
+    voted_for_co = models.BooleanField(default=False)
+    voted_for_lp = models.BooleanField(default=False)
+    voted_for_all = models.BooleanField(default=False)
 
     objects = AccountManager()
 
