@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TASHTECH | SRC ELECTION PORTAL</title>
+</head>
+
+<body>
+    <header id="showcase">
+        <div class="container" id="container">
+            <h1>Tastech SRC <span style="color: gold;">E-Voting</span> Portal</h1> <br>
+            <p style="font-weight: bold;">One Election Available</p> <br>
+            <a href="{% url 'accounts:login' %}" class="button">Proceed To Election</a>
+        </div>
+    </header>
+
+
+
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+            font-size: 17px;
+            color: #926239;
+            line-height: 1.6;
+        }
+
+        #container {
+            display: block;
+            justify-content: center;
+            padding: 100px;
+            align-items: center;
+            text-align: center;
+            border-radius: 50px;
+            background-color: white;
+            opacity: 0.7;
+        }
+
+        #container p {
+            display: block;
+        }
+
+        #showcase {
+            /* background-image: url('https://tinyurl.com/mr3wa6ww'); */
+            /* background-image: url('https://tinyurl.com/bd87ftvd'); */
+            background-image: url('https://tinyurl.com/37c7a8r4');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        #showcase h1 {
+            font-size: 50px;
+            line-height: 1.2;
+        }
+
+        #showcase p {
+            font-size: 20px;
+        }
+
+        #showcase .button {
+            font-size: 18px;
+            text-decoration: none;
+            color: #926239;
+            border: #926239 1px solid;
+            padding: 10px 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        #showcase .button:hover {
+            background: #926239;
+            color: #fff;
+        }
+    </style>
+</body>
+
+</html>
