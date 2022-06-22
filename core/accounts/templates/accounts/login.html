@@ -4,17 +4,6 @@
 {% block content %}
 <div class="card-body" style="width: 80%;">
     <div class="main-signup-header">
-        <!-- handle alert messages -->
-        {% if messages %}
-        {% for message in messages %}
-        <div class="alert alert-warning alert-dismissible fade show" role="alert">
-            {{message}}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        {% endfor %}
-        {% endif %}
         <h2 style="color: gold;">Election Portal</h2>
         <h5 class="fw-semibold mb-4 text-primary">Please Login to Proceed.</h5>
         <form action="" method="POST">
