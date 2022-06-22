@@ -18,6 +18,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     voted_for_lp = models.BooleanField(default=False)
     voted_for_all = models.BooleanField(default=False)
 
+    is_staff = models.BooleanField(default=False)
+
     objects = AccountManager()
 
     USERNAME_FIELD = 'index_number'
