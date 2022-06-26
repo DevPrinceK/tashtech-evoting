@@ -43,14 +43,10 @@
                                 new Chart(document.querySelector('#top-rated'), {
                                     type: 'bar',
                                     data: {
-                                        labels: ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun',
-                                            'Tue', 'Wed', 'Thur',
-                                            'Fri', 'Sat', 'Sun'
-                                        ],
+                                        labels: [{% for i in positions %} '{{i.name}}', {% endfor %}],
                                         datasets: [{
                                             label: 'Votes Received',
-                                            data: [100, 75, 80, 65, 95, 36, 76, 75, 80, 65, 95,
-                                                36, 76
+                                            data: [75, 80, 65, 95, 36, 76, 75, 80, 65, 95
                                             ],
                                             backgroundColor: [
                                                 'rgba(255, 99, 132, 0.2)',
@@ -104,15 +100,10 @@
                                 new Chart(document.querySelector('#president'), {
                                     type: 'doughnut',
                                     data: {
-                                        labels: [
-                                            'Candidate 1',
-                                            'Candidate 2',
-                                            'Candidate 3',
-
-                                        ],
+                                        labels: [{% for i in src_presidents %} '{{i.name}}', {% endfor %}],
                                         datasets: [{
                                             label: 'Product Status',
-                                            data: [45, 85, 60],
+                                            data: [{% for i in src_presidents %} {{i.vote_count}}, {% endfor %}],
                                             backgroundColor: [
                                                 'gold',
                                                 'blue',
