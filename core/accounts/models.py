@@ -19,7 +19,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     is_staff = models.BooleanField(default=False)
     is_student = models.BooleanField(default=False)
-    is_done_voting = models.BooleanField(default=False)
 
     objects = AccountManager()
 
