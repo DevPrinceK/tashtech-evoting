@@ -1,7 +1,8 @@
 from enum import Enum
 
+
 class PortfolioName(Enum):
-    SP = 'SENIOR PREFECT'   # SENIOR PREFECT
+    SP = 'SRC PRESIDENT'   # SENIOR PREFECT
     GP = 'GIRLS PREFECT'   # GIRLS PREFECT
     CO = 'COMPOUND OVERSEER'   # COMPOUND OVERSEER
     LP = 'LIBRARY PREFECT'   # LIBRARY PREFECT
