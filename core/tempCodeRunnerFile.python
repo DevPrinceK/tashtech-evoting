@@ -1,0 +1,5 @@
+import time
+
+key4 = str(int(100000 * time.time()))[::-1][0:5]
+
+print(key4)
