@@ -1,5 +1,6 @@
 import csv
 import io
+# from sqlite3 import IntegrityError
 import time
 from django.contrib import messages
 from django.http import HttpResponseRedirect
@@ -7,6 +8,9 @@ from django.shortcuts import redirect, render
 from django.utils.decorators import method_decorator
 from django.utils.html import strip_tags
 from django.views.generic import View
+from django.db import IntegrityError
+
+
 from accounts.models import User
 
 from core.utils.decorators import AdminOnly
@@ -66,21 +70,35 @@ class UploadVotersFromCSV(View):
 
     @method_decorator(AdminOnly)
     def post(self, request, *args, **kwargs):
+        new_voters = 0
         csv_file = request.FILES.get('csv_file')
         dataset = csv_file.read().decode('UTF-8')
         io_string = io.StringIO(dataset)
         next(io_string)
         for column in csv.reader(io_string, delimiter=',', quotechar="|"):
-            _, created = User.objects.update_or_create(
-                teacher_id=column[0],
-                teacher_name=column[1],
-                teacher_gender=column[2],
-                teacher_d_o_b=column[3],
-                teacher_mobile=column[4],
-            )
-        messages.success(request, "Teachers uploaded successfully")
-        return redirect('admin_teachers')
-
+            external_key = str(int(100000 * time.time()))[::-1][0:5]  # noqa # generate password for voter
+            # create user with custom user manager
+            try:
+                _ = User.objects.create_user(
+                    index_number=column[0],
+                    password=external_key,
+                )
+            except IntegrityError:
+                '''Skip duplicate IDs'''
+                print('Voter with index number {} already exists'.format(column[0]))  # noqa
+            else:
+                # update user with other relevant data after creating
+                if _:
+                    _.fullname = column[1]
+                    _.user_class = column[2]
+                    _.external_key = external_key
+                    _.save()
+                new_voters += 1
+        if new_voters > 0:
+            messages.success(request, '{} Voters uploaded Successfully'.format(new_voters))  # noqa
+        else:
+            messages.error(request, 'No Voters Uploaded! Voters already exist')  # noqa
+        return redirect('backend:voters')
 
 
 class DeleteVoterView(View):
