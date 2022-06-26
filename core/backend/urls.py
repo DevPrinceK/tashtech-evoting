@@ -34,4 +34,11 @@ urlpatterns += [
     path('voters/', views.VotersView.as_view(), name='voters'),
     path('create-update_voter/', views.CreateUpdateVoterView.as_view(), name='create_update_voter'),  # noqa
     path('delete-voter/', views.DeleteVoterView.as_view(), name='delete_voter'),  # noqa
+    path('upload-register/', views.UploadVotersFromCSV.as_view(), name='upload_register'),  # noqa
+]
+
+
+# Verification
+urlpatterns += [
+    path('verification/', views.VerificationView.as_view(), name='verification'),
 ]
