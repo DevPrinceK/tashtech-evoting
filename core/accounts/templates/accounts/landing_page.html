@@ -12,7 +12,8 @@
     <header id="showcase">
         <div class="container" id="container">
             <h1>Tastech SRC <span style="color: gold;">E-Voting</span> Portal</h1> <br>
-            <p style="font-weight: bold;">One Election Available</p> <br>
+            <b style="color: gold;">Available Election</b>
+            <p style="font-weight: bold;">{{current_election}}</p> <br>
             <a href="{% url 'accounts:login' %}" class="button">Proceed To Election</a>
         </div>
     </header>
