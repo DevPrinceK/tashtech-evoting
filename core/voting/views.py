@@ -8,6 +8,15 @@ from core.utils.decorators import MustLogin
 from core.utils.constants import PortfolioName
 
 
+class StartVotingView(View):
+    '''Entry point of election'''
+    template = 'voting/start_voting.html'
+
+    @method_decorator(MustLogin)
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template, {})
+
+
 class VoteSPView(View):
     '''Implements voting for SENIOR PREFECTS'''
     template = 'voting/vote.html'
