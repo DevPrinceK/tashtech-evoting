@@ -3,12 +3,16 @@ from django.views import View
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 
+from backend.models import Election
+
 
 class LandingPageView(View):
     template = 'accounts/landing_page.html'
 
     def get(self, request, *args, **kwargs):
-        return render(request, self.template, {})
+        current_election = Election.objects.filter(is_active=True).order_by('created_at').first()  # noqa
+        context = {'current_election': current_election}
+        return render(request, self.template, context)
 
 
 class LoginView(View):
@@ -38,5 +42,4 @@ class LoginView(View):
 class LogoutView(View):
     def get(self, request, *args, **kwargs):
         logout(request)
-        messages.success(request, 'Logout successful')
         return redirect('accounts:login')
