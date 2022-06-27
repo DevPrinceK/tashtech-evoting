@@ -1,12 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    {% load static %}
+    <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" type="image/png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>Tashtech SRC | Vote - {{position}} </title>
 </head>
+
 <body>
-    <h1>CAST YOUR VOTE HERE</h1>
+    <div class="container" style="background-color: rgb(236, 236, 232);">
+        <div class="row">
+            <div class="col-md-12 mt-5">
+                <!--  -->
+                <div class="card mb-2">
+                    <div class="card-header">
+                        <h3 class="text-center">{{position|upper}}</h3>
+                    </div>
+                </div>
+
+                {% for candidate in candidates %}
+                <!-- CANDIDATE -->
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h3>{{candidate.name|upper}}</h3>
+                    </div>
+                    <!--  -->
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-4">
+                                <img src="{% if candidate.picture %} {{candidate.picture.url}} {% else %} {% static 'images/illustrations/user.png' %} {% endif %} "
+                                    alt="candidate" style="height: 200px; width:auto;">
+                            </div>
+                            <div class="col-8">
+                                <form action="" method="POST">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="candidate_id" value="{{candidate.id}}">
+                                    <div class="form-group mb-2">
+                                        <label for=""> <b>Candidate Name</b></label>
+                                        <input type="text" class="form-control" value="{{candidate.name|upper}}"
+                                            readonly>
+                                    </div>
+                                    <div class="form-group mb-2">
+                                        <label for=""><b>Nickname</b></label>
+                                        <input type="text" class="form-control" value="{{candidate.nickname|upper}}"
+                                            readonly>
+                                    </div>
+                                    <div class="form-group mb-2">
+                                        <label for=""><b>Position</b></label>
+                                        <input type="text" class="form-control"
+                                            value="{{candidate.position.name|upper}}" readonly>
+                                    </div>
+                                    <div class="form-group">
+                                        <button class="btn btn-primary">Vote</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <!--  -->
+                </div>
+                <!-- /CANDIDATE -->
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 </body>
+
 </html>
