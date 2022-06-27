@@ -23,8 +23,9 @@ class VoteSPView(View):
 
     @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
-        candidates = Candidate.objects.filter(portfolio__name=PortfolioName.SP.value).order_by('ballot_number')  # noqa
+        candidates = Candidate.objects.filter(position__name=PortfolioName.SP.value).order_by('ballot_number')  # noqa
         context = {
+            'position': PortfolioName.SP.value,
             'candidates': candidates,
         }
         return render(request, self.template, context)
@@ -40,7 +41,7 @@ class VoteSPView(View):
             messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
             return redirect('voting:vote_gp')
         candidate_id = request.POST.get('candidate_id')
-        candidate = Candidate.objects.filter(portfolio__name=PortfolioName.SP.value, id=candidate_id)  # noqa
+        candidate = Candidate.objects.filter(position__name=PortfolioName.SP.value, id=candidate_id).first()  # noqa
         # vote
         candidate.vote_count += 1
         candidate.voted_for_sp = True
@@ -55,8 +56,9 @@ class VoteGPView(View):
 
     @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
-        candidates = Candidate.objects.filter(portfolio__name=PortfolioName.GP.value).order_by('ballot_number')  # noqa
+        candidates = Candidate.objects.filter(position__name=PortfolioName.GP.value).order_by('ballot_number')  # noqa
         context = {
+            'position': PortfolioName.GP.value,
             'candidates': candidates,
         }
         return render(request, self.template, context)
@@ -72,7 +74,7 @@ class VoteGPView(View):
             messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
             return redirect('voting:vote_co')
         candidate_id = request.POST.get('candidate_id')
-        candidate = Candidate.objects.filter(portfolio__name=PortfolioName.GP.value, id=candidate_id)  # noqa
+        candidate = Candidate.objects.filter(position__name=PortfolioName.GP.value, id=candidate_id).first()  # noqa
         # vote
         candidate.vote_count += 1
         candidate.voted_for_gp = True
@@ -87,8 +89,9 @@ class VoteCOView(View):
 
     @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
-        candidates = Candidate.objects.filter(portfolio__name=PortfolioName.CO.value).order_by('ballot_number')  # noqa
+        candidates = Candidate.objects.filter(position__name=PortfolioName.CO.value).order_by('ballot_number')  # noqa
         context = {
+            'position': PortfolioName.CO.value,
             'candidates': candidates,
         }
         return render(request, self.template, context)
@@ -104,7 +107,7 @@ class VoteCOView(View):
             messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
             return redirect('voting:vote_lp')
         candidate_id = request.POST.get('candidate_id')
-        candidate = Candidate.objects.filter(portfolio__name=PortfolioName.CO.value, id=candidate_id)  # noqa
+        candidate = Candidate.objects.filter(position__name=PortfolioName.CO.value, id=candidate_id).first()  # noqa
         # vote
         candidate.vote_count += 1
         candidate.voted_for_co = True
@@ -119,8 +122,9 @@ class VoteLPView(View):
 
     @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
-        candidates = Candidate.objects.filter(portfolio__name=PortfolioName.LP.value).order_by('ballot_number')  # noqa
+        candidates = Candidate.objects.filter(position__name=PortfolioName.LP.value).order_by('ballot_number')  # noqa
         context = {
+            'position': PortfolioName.LP.value,
             'candidates': candidates,
         }
         return render(request, self.template, context)
@@ -136,7 +140,7 @@ class VoteLPView(View):
             messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
             return redirect('voting:vote_completed')
         candidate_id = request.POST.get('candidate_id')
-        candidate = Candidate.objects.filter(portfolio__name=PortfolioName.LP.value, id=candidate_id)  # noqa
+        candidate = Candidate.objects.filter(position__name=PortfolioName.LP.value, id=candidate_id).first()  # noqa
         # vote
         candidate.vote_count += 1
         candidate.voted_for_lp = True
