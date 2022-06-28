@@ -30,7 +30,7 @@ class LoginView(View):
             login(request, user)
             if user.is_student:
                 messages.success(request, 'Login successful')
-                return redirect('voting:start_voting')
+                return redirect('voting:instructions')
             elif user.is_staff or user.is_superuser:
                 messages.success(request, 'Login successful')
                 return redirect('backend:index')
