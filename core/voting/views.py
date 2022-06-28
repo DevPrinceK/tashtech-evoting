@@ -466,6 +466,70 @@ class VoteCSGView(View):
         return redirect('voting:vote_ppb')
 
 
+class VotePPBView(View):
+    '''Implements voting for PREPS PREFECT - BOYS'''
+    template = 'voting/vote.html'
+
+    @method_decorator(MustLogin)
+    def get(self, request, *args, **kwargs):
+        check_already_voted(request)
+        candidates = Candidate.objects.filter(position__name=PositionName.PPB.value).order_by('ballot_number')  # noqa
+        context = {
+            'position': PositionName.PPB.value,
+            'candidates': candidates,
+        }
+        return render(request, self.template, context)
+
+    @method_decorator(MustLogin)
+    def post(self, request, *args, **kwargs):
+        check_already_voted(request)  # check if voter has already voted
+        # already voted for this portfolio
+        if request.user.voted_for_ppb:
+            messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
+            return redirect('voting:vote_ppg')
+        candidate_id = request.POST.get('candidate_id')
+        candidate = Candidate.objects.filter(position__name=PositionName.PPB.value, id=candidate_id).first()  # noqa
+        # vote
+        candidate.vote_count += 1
+        candidate.save()
+        request.user.voted_for_csg = True
+        request.user.save()
+        messages.success(request, 'Vote Successful, Proceed to next portfolio.')  # noqa
+        return redirect('voting:vote_ppb')
+
+
+class VotePPGView(View):
+    '''Implements voting for PREPS PREFECT - GIRLS'''
+    template = 'voting/vote.html'
+
+    @method_decorator(MustLogin)
+    def get(self, request, *args, **kwargs):
+        check_already_voted(request)
+        candidates = Candidate.objects.filter(position__name=PositionName.PPG.value).order_by('ballot_number')  # noqa
+        context = {
+            'position': PositionName.PPG.value,
+            'candidates': candidates,
+        }
+        return render(request, self.template, context)
+
+    @method_decorator(MustLogin)
+    def post(self, request, *args, **kwargs):
+        check_already_voted(request)  # check if voter has already voted
+        # already voted for this portfolio
+        if request.user.voted_for_ppg:
+            messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
+            return redirect('voting:vote_hspb')
+        candidate_id = request.POST.get('candidate_id')
+        candidate = Candidate.objects.filter(position__name=PositionName.PPG.value, id=candidate_id).first()  # noqa
+        # vote
+        candidate.vote_count += 1
+        candidate.save()
+        request.user.voted_for_ppg = True
+        request.user.save()
+        messages.success(request, 'Vote Successful, Proceed to next portfolio.')  # noqa
+        return redirect('voting:vote_hspb')
+
+
 class VoteCompletedView(View):
     '''View to show the vote has been completed'''
     template = 'voting/vote_completed.html'
