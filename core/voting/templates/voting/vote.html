@@ -13,13 +13,13 @@
 </head>
 
 <body>
-    <div class="container" style="background-color: rgb(236, 236, 232);">
+    <div class="container" style="background-color: rgb(243, 241, 241);">
         <div class="row">
             <div class="col-md-12 mt-5">
                 <!--  -->
                 <div class="card mb-2">
                     <div class="card-header">
-                        <h3 class="text-center">{{position|upper}}</h3>
+                        <h3 class="text-center bg-white">{{position|upper}}</h3>
                     </div>
                 </div>
 
@@ -42,18 +42,21 @@
                                     <input type="hidden" name="candidate_id" value="{{candidate.id}}">
                                     <div class="form-group mb-2">
                                         <label for=""> <b>Candidate Name</b></label>
-                                        <input type="text" class="form-control" value="{{candidate.name|upper}}"
-                                            readonly>
+                                        <p>{{candidate.name|upper}}</p>
+                                        <!-- <input type="text" class="form-control" value="{{candidate.name|upper}}"
+                                            readonly> -->
                                     </div>
                                     <div class="form-group mb-2">
                                         <label for=""><b>Nickname</b></label>
-                                        <input type="text" class="form-control" value="{{candidate.nickname|upper}}"
-                                            readonly>
+                                        <p>{{candidate.nickname|upper}}</p>
+                                        <!-- <input type="text" class="form-control" value="{{candidate.nickname|upper}}"
+                                            readonly> -->
                                     </div>
                                     <div class="form-group mb-2">
                                         <label for=""><b>Position</b></label>
-                                        <input type="text" class="form-control"
-                                            value="{{candidate.position.name|upper}}" readonly>
+                                        <p>{{candidate.position.name|upper}}</p>
+                                        <!-- <input type="text" class="form-control"
+                                            value="{{candidate.position.name|upper}}" readonly> -->
                                     </div>
                                     <div class="form-group">
                                         <button class="btn btn-primary">Vote</button>
