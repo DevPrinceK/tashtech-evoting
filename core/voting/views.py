@@ -5,8 +5,9 @@ from django.contrib import messages
 
 from backend.models import Candidate
 from core.utils.decorators import MustLogin
-from core.utils.constants import PortfolioName
+from core.utils.constants import PositionName
 from core.utils.utils import check_already_voted
+
 
 class InstructionsView(View):
     '''Entry point of election'''
@@ -18,132 +19,131 @@ class InstructionsView(View):
 
 
 class VoteSPView(View):
-    '''Implements voting for SENIOR PREFECTS'''
+    '''Implements voting for SENIOR BOYS PREFECTS'''
     template = 'voting/vote.html'
 
     @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
-        check_already_voted(request)
-        candidates = Candidate.objects.filter(position__name=PortfolioName.SP.value).order_by('ballot_number')  # noqa
+        check_already_voted(request)  # check if voter has already voted
+        candidates = Candidate.objects.filter(position__name=PositionName.SP.value).order_by('ballot_number')  # noqa
         context = {
-            'position': PortfolioName.SP.value,
+            'position': PositionName.SP.value,
             'candidates': candidates,
         }
         return render(request, self.template, context)
 
     @method_decorator(MustLogin)
     def post(self, request, *args, **kwargs):
-        # have already completed voting
-        check_already_voted(request)
+        check_already_voted(request)  # check if voter has already voted
         # already voted for this portfolio
         if request.user.voted_for_sp:
             messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
             return redirect('voting:vote_gp')
         candidate_id = request.POST.get('candidate_id')
-        candidate = Candidate.objects.filter(position__name=PortfolioName.SP.value, id=candidate_id).first()  # noqa
+        candidate = Candidate.objects.filter(position__name=PositionName.SP.value, id=candidate_id).first()  # noqa
         # vote
         candidate.vote_count += 1
-        candidate.voted_for_sp = True
         candidate.save()
+        request.user.voted_for_sp = True
+        request.user.save()
         messages.success(request, 'Vote Successful, Proceed to next portfolio.')  # noqa
         return redirect('voting:vote_gp')
 
 
 class VoteGPView(View):
-    '''Implements voting for GIRLS PREFECTS'''
+    '''Implements voting for SENIOR GIRLS PREFECTS'''
     template = 'voting/vote.html'
 
     @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
         check_already_voted(request)
-        candidates = Candidate.objects.filter(position__name=PortfolioName.GP.value).order_by('ballot_number')  # noqa
+        candidates = Candidate.objects.filter(position__name=PositionName.GP.value).order_by('ballot_number')  # noqa
         context = {
-            'position': PortfolioName.GP.value,
+            'position': PositionName.GP.value,
             'candidates': candidates,
         }
         return render(request, self.template, context)
 
     @method_decorator(MustLogin)
     def post(self, request, *args, **kwargs):
-        # have already completed voting
-        check_already_voted(request)
+        check_already_voted(request)  # check if voter has already voted
         # already voted for this portfolio
         if request.user.voted_for_gp:
             messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
-            return redirect('voting:vote_co')
+            return redirect('voting:vote_cob')
         candidate_id = request.POST.get('candidate_id')
-        candidate = Candidate.objects.filter(position__name=PortfolioName.GP.value, id=candidate_id).first()  # noqa
+        candidate = Candidate.objects.filter(position__name=PositionName.GP.value, id=candidate_id).first()  # noqa
         # vote
         candidate.vote_count += 1
-        candidate.voted_for_gp = True
         candidate.save()
+        request.user.voted_for_gp = True
+        request.user.save()
         messages.success(request, 'Vote Successful, Proceed to next portfolio.')  # noqa
         return redirect('voting:vote_co')
 
 
-class VoteCOView(View):
-    '''Implements voting for COMPOUND OVERSEERS'''
+class VoteCOBView(View):
+    '''Implements voting for COMPOUND OVERSEER - BOYS'''
     template = 'voting/vote.html'
 
     @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
         check_already_voted(request)
-        candidates = Candidate.objects.filter(position__name=PortfolioName.CO.value).order_by('ballot_number')  # noqa
+        candidates = Candidate.objects.filter(position__name=PositionName.COB.value).order_by('ballot_number')  # noqa
         context = {
-            'position': PortfolioName.CO.value,
+            'position': PositionName.COB.value,
             'candidates': candidates,
         }
         return render(request, self.template, context)
 
     @method_decorator(MustLogin)
     def post(self, request, *args, **kwargs):
-        # have already completed voting
-        check_already_voted(request)
+        check_already_voted(request)  # check if voter has already voted
         # already voted for this portfolio
-        if request.user.voted_for_gp:
+        if request.user.voted_for_cob:
             messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
-            return redirect('voting:vote_lp')
+            return redirect('voting:vote_cog')
         candidate_id = request.POST.get('candidate_id')
-        candidate = Candidate.objects.filter(position__name=PortfolioName.CO.value, id=candidate_id).first()  # noqa
+        candidate = Candidate.objects.filter(position__name=PositionName.COB.value, id=candidate_id).first()  # noqa
         # vote
         candidate.vote_count += 1
-        candidate.voted_for_co = True
         candidate.save()
+        request.user.voted_for_cob = True
+        request.user.save()
         messages.success(request, 'Vote Successful, Proceed to next portfolio.')  # noqa
-        return redirect('voting:vote_lp')
+        return redirect('voting:vote_cog')
 
 
-class VoteLPView(View):
-    '''Implements voting for LIBRARY PREFECT'''
+class VoteCOGView(View):
+    '''Implements voting for COMPOUND OVERSEER - GIRLS'''
     template = 'voting/vote.html'
 
     @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
         check_already_voted(request)
-        candidates = Candidate.objects.filter(position__name=PortfolioName.LP.value).order_by('ballot_number')  # noqa
+        candidates = Candidate.objects.filter(position__name=PositionName.COG.value).order_by('ballot_number')  # noqa
         context = {
-            'position': PortfolioName.LP.value,
+            'position': PositionName.COG.value,
             'candidates': candidates,
         }
         return render(request, self.template, context)
 
     @method_decorator(MustLogin)
     def post(self, request, *args, **kwargs):
-        # have already completed voting
-        check_already_voted(request)
+        check_already_voted(request)  # check if voter has already voted
         # already voted for this portfolio
-        if request.user.voted_for_lp:
+        if request.user.voted_for_cog:
             messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
-            return redirect('voting:vote_completed')
+            return redirect('voting:vote_sgpb')
         candidate_id = request.POST.get('candidate_id')
-        candidate = Candidate.objects.filter(position__name=PortfolioName.LP.value, id=candidate_id).first()  # noqa
+        candidate = Candidate.objects.filter(position__name=PositionName.COG.value, id=candidate_id).first()  # noqa
         # vote
         candidate.vote_count += 1
-        candidate.voted_for_lp = True
-        candidate.voted_for_all = True
         candidate.save()
+        request.user.voted_for_cog = True
+        request.user.save()
         messages.success(request, 'Vote Successful, Proceed to next portfolio.')  # noqa
-        return redirect('voting:vote_lp')
+        return redirect('voting:vote_sgpb')
 
 
 class VoteCompletedView(View):
