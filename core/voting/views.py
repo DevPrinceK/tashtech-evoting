@@ -172,10 +172,41 @@ class VoteSGPBView(View):
         # vote
         candidate.vote_count += 1
         candidate.save()
-        request.user.voted_for_cog = True
+        request.user.voted_for_sgpb = True
         request.user.save()
         messages.success(request, 'Vote Successful, Proceed to next portfolio.')  # noqa
         return redirect('voting:vote_sgpg')
+
+class VoteSGPGView(View):
+    '''Implements voting for SPORTS AND GAMES PREF - GIRLS'''
+    template = 'voting/vote.html'
+
+    @method_decorator(MustLogin)
+    def get(self, request, *args, **kwargs):
+        check_already_voted(request)
+        candidates = Candidate.objects.filter(position__name=PositionName.SGPG.value).order_by('ballot_number')  # noqa
+        context = {
+            'position': PositionName.SGPG.value,
+            'candidates': candidates,
+        }
+        return render(request, self.template, context)
+
+    @method_decorator(MustLogin)
+    def post(self, request, *args, **kwargs):
+        check_already_voted(request)  # check if voter has already voted
+        # already voted for this portfolio
+        if request.user.voted_for_sgpg:
+            messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
+            return redirect('voting:vote_dhpb')
+        candidate_id = request.POST.get('candidate_id')
+        candidate = Candidate.objects.filter(position__name=PositionName.SGPG.value, id=candidate_id).first()  # noqa
+        # vote
+        candidate.vote_count += 1
+        candidate.save()
+        request.user.voted_for_sgpg = True
+        request.user.save()
+        messages.success(request, 'Vote Successful, Proceed to next portfolio.')  # noqa
+        return redirect('voting:vote_dhpb')
 
 
 class VoteCompletedView(View):
