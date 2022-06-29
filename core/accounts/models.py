@@ -9,6 +9,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     fullname = models.CharField(max_length=60, null=True, blank=True)
     user_class = models.CharField(max_length=20, null=True, blank=True)
     house = models.CharField(max_length=20, null=True, blank=True)
+    sex = models.CharField(max_length=10, blank=True, null=True)
     # voted for senior prefects
     voted_for_sp = models.BooleanField(default=False)
     voted_for_gp = models.BooleanField(default=False)
