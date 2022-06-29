@@ -108,13 +108,13 @@ USE_TZ = True
 
 
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles/'
 MEDIA_ROOT = BASE_DIR / 'assets/'
 MEDIA_URL = '/assets/'
 
 STATICFILES_DIRS = [
     BASE_DIR / "dist",
-    BASE_DIR / "staticfiles",
+    BASE_DIR / "static",
 ]
 
 
