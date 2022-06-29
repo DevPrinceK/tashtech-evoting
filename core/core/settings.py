@@ -114,7 +114,7 @@ MEDIA_URL = '/assets/'
 
 STATICFILES_DIRS = [
     BASE_DIR / "dist",
-    BASE_DIR / "static",
+    BASE_DIR / "staticfiles",
 ]
 
 
