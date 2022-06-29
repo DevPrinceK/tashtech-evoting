@@ -4,7 +4,7 @@
 {% block content %}
 <div class="card-body" style="width: 80%;">
     <div class="main-signup-header">
-        <h2 style="color: gold;">Election Portal</h2>
+        <h4 style="color: gold;">SRC Election Portal</h4>
         <h5 class="fw-semibold mb-4 text-primary">Please Login to Proceed.</h5>
         <form action="" method="POST">
             {% csrf_token %}
@@ -22,9 +22,7 @@
             <button class="btn btn-primary btn-block" type="submit">Login</button>
             <br> <br>
         </form>
-        <div class="container text-center">
-            <a href="{% url 'accounts:landing_page' %}">Back To Homepage</a>
-        </div>
+
     </div>
 </div>
 <!-- NOTE ENDS -->
