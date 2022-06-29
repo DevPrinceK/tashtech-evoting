@@ -19,8 +19,9 @@ class Candidate(models.Model):
     '''Model to create and manage cnadidates'''
     name = models.CharField(max_length=100)
     nickname = models.CharField(max_length=100, null=True, blank=True)
-    position = models.ForeignKey(
-        'Position', on_delete=models.SET_NULL, null=True, blank=True)
+    position = models.ForeignKey('Position', on_delete=models.SET_NULL, null=True, blank=True)  # noqa
+    house = models.CharField(max_length=20, null=True, blank=True)
+    sex = models.CharField(max_length=10, blank=True, null=True)
     picture = models.ImageField(upload_to='pictures', null=True, blank=True)
     ballot_number = models.IntegerField(default=1)
     vote_count = models.IntegerField(default=0)
