@@ -54,9 +54,17 @@
                             <p>{{voter.user_class}}</p>
                         </div>
                         <div class="col-4 ">
+                            <b>House</b>
+                            <p>{{voter.house}}</p>
+                        </div>
+                        <div class="col-4 ">
+                            <b>Sex</b>
+                            <p>{{voter.sex}}</p>
+                        </div>
+                        <div class="col-4 ">
                             <b>Already Voted</b> <br>
                             <p class="badge bg-{{voter.voted_for_all|yesno:"success,danger"}}">
-                                {{category.voted_for_all|yesno:"Yes,No"}}</p>
+                                {{voter.voted_for_all|yesno:"Yes,No"}}</p>
                         </div>
                         <div class="col-12 text-center">
                             <b>VOTER'S PASSWORD</b>
