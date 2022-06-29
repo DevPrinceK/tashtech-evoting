@@ -36,30 +36,37 @@
                                 <img src="{% if candidate.picture %} {{candidate.picture.url}} {% else %} {% static 'images/illustrations/user.png' %} {% endif %} "
                                     alt="candidate" style="height: 200px; width:auto;">
                             </div>
-                            <div class="col-8">
+                            <div class="col-4">
                                 <form action="" method="POST">
                                     {% csrf_token %}
                                     <input type="hidden" name="candidate_id" value="{{candidate.id}}">
                                     <div class="form-group mb-2">
                                         <label for=""> <b>Candidate Name</b></label>
                                         <p>{{candidate.name|upper}}</p>
-                                        <!-- <input type="text" class="form-control" value="{{candidate.name|upper}}"
-                                            readonly> -->
                                     </div>
                                     <div class="form-group mb-2">
                                         <label for=""><b>Nickname</b></label>
                                         <p>{{candidate.nickname|upper}}</p>
-                                        <!-- <input type="text" class="form-control" value="{{candidate.nickname|upper}}"
-                                            readonly> -->
                                     </div>
                                     <div class="form-group mb-2">
                                         <label for=""><b>Position</b></label>
                                         <p>{{candidate.position.name|upper}}</p>
-                                        <!-- <input type="text" class="form-control"
-                                            value="{{candidate.position.name|upper}}" readonly> -->
                                     </div>
                                     <div class="form-group">
                                         <button class="btn btn-primary">Vote</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-4">
+                                <form action="" method="POST">
+                                    {% csrf_token %}
+                                    <div class="form-group mb-2">
+                                        <label for=""> <b>Candidate Sex</b></label>
+                                        <p>{{candidate.sex|upper}}</p>
+                                    </div>
+                                    <div class="form-group mb-2">
+                                        <label for=""><b>House</b></label>
+                                        <p>{{candidate.house|upper}}</p>
                                     </div>
                                 </form>
                             </div>
