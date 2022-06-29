@@ -58,6 +58,9 @@ class CreateUpdateVoterView(View):
             )
             voter.fullname = request.POST.get('fullname')
             voter.user_class = request.POST.get('user_class')
+            voter.external_key = external_key
+            voter.sex = request.POST.get('sex')
+            voter.house = request.POST.get('house')
             voter.save()
             messages.success(request, 'Voter Created Successfully')
             return redirect('backend:voters')
@@ -90,7 +93,9 @@ class UploadVotersFromCSV(View):
                 # update user with other relevant data after creating
                 if _:
                     _.fullname = column[1]
-                    _.user_class = column[2]
+                    _.sex = column[2]
+                    _.user_class = column[3]
+                    _.house = column[4]
                     _.external_key = external_key
                     _.save()
                 new_voters += 1
