@@ -5,8 +5,8 @@ from django.contrib import messages
 
 from backend.models import Candidate
 from core.utils.decorators import MustLogin
-from core.utils.constants import PositionName
-from core.utils.utils import check_already_voted
+from core.utils.constants import PositionName, Sex
+from core.utils.utils import check_already_voted, vote_for_all
 
 
 class InstructionsView(View):
@@ -15,6 +15,10 @@ class InstructionsView(View):
 
     @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
+        # if request.user.voted_for_all:
+        # return redirect('voting:already_voted')
+        if request.user.voted_for_all:
+            return redirect('voting:already_voted')
         return render(request, self.template, {})
 
 
@@ -24,7 +28,9 @@ class VoteSPView(View):
 
     @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
-        check_already_voted(request)  # check if voter has already voted
+        if request.user.voted_for_all:
+            # check if voter has already voted
+            return redirect('voting:already_voted')
         candidates = Candidate.objects.filter(position__name=PositionName.SP.value).order_by('ballot_number')  # noqa
         context = {
             'position': PositionName.SP.value,
@@ -34,7 +40,9 @@ class VoteSPView(View):
 
     @method_decorator(MustLogin)
     def post(self, request, *args, **kwargs):
-        check_already_voted(request)  # check if voter has already voted
+        if request.user.voted_for_all:
+            # check if voter has already voted
+            return redirect('voting:already_voted')
         # already voted for this portfolio
         if request.user.voted_for_sp:
             messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
@@ -56,7 +64,8 @@ class VoteGPView(View):
 
     @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
-        check_already_voted(request)
+        if request.user.voted_for_all:
+            return redirect('voting:already_voted')
         candidates = Candidate.objects.filter(position__name=PositionName.GP.value).order_by('ballot_number')  # noqa
         context = {
             'position': PositionName.GP.value,
@@ -66,7 +75,9 @@ class VoteGPView(View):
 
     @method_decorator(MustLogin)
     def post(self, request, *args, **kwargs):
-        check_already_voted(request)  # check if voter has already voted
+        if request.user.voted_for_all:
+            # check if voter has already voted
+            return redirect('voting:already_voted')
         # already voted for this portfolio
         if request.user.voted_for_gp:
             messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
@@ -79,7 +90,7 @@ class VoteGPView(View):
         request.user.voted_for_gp = True
         request.user.save()
         messages.success(request, 'Vote Successful, Proceed to next portfolio.')  # noqa
-        return redirect('voting:vote_co')
+        return redirect('voting:vote_cob')
 
 
 class VoteCOBView(View):
@@ -88,7 +99,8 @@ class VoteCOBView(View):
 
     @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
-        check_already_voted(request)
+        if request.user.voted_for_all:
+            return redirect('voting:already_voted')
         candidates = Candidate.objects.filter(position__name=PositionName.COB.value).order_by('ballot_number')  # noqa
         context = {
             'position': PositionName.COB.value,
@@ -98,7 +110,9 @@ class VoteCOBView(View):
 
     @method_decorator(MustLogin)
     def post(self, request, *args, **kwargs):
-        check_already_voted(request)  # check if voter has already voted
+        if request.user.voted_for_all:
+            # check if voter has already voted
+            return redirect('voting:already_voted')
         # already voted for this portfolio
         if request.user.voted_for_cob:
             messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
@@ -120,7 +134,8 @@ class VoteCOGView(View):
 
     @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
-        check_already_voted(request)
+        if request.user.voted_for_all:
+            return redirect('voting:already_voted')
         candidates = Candidate.objects.filter(position__name=PositionName.COG.value).order_by('ballot_number')  # noqa
         context = {
             'position': PositionName.COG.value,
@@ -130,7 +145,9 @@ class VoteCOGView(View):
 
     @method_decorator(MustLogin)
     def post(self, request, *args, **kwargs):
-        check_already_voted(request)  # check if voter has already voted
+        if request.user.voted_for_all:
+            # check if voter has already voted
+            return redirect('voting:already_voted')
         # already voted for this portfolio
         if request.user.voted_for_cog:
             messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
@@ -152,7 +169,8 @@ class VoteSGPBView(View):
 
     @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
-        check_already_voted(request)
+        if request.user.voted_for_all:
+            return redirect('voting:already_voted')
         candidates = Candidate.objects.filter(position__name=PositionName.SGPB.value).order_by('ballot_number')  # noqa
         context = {
             'position': PositionName.SGPB.value,
@@ -162,13 +180,15 @@ class VoteSGPBView(View):
 
     @method_decorator(MustLogin)
     def post(self, request, *args, **kwargs):
-        check_already_voted(request)  # check if voter has already voted
+        if request.user.voted_for_all:
+            # check if voter has already voted
+            return redirect('voting:already_voted')
         # already voted for this portfolio
         if request.user.voted_for_sgpb:
             messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
             return redirect('voting:vote_sgpg')
         candidate_id = request.POST.get('candidate_id')
-        candidate = Candidate.objects.filter(position__name=PositionName.COG.value, id=candidate_id).first()  # noqa
+        candidate = Candidate.objects.filter(position__name=PositionName.SGPB.value, id=candidate_id).first()  # noqa
         # vote
         candidate.vote_count += 1
         candidate.save()
@@ -184,7 +204,8 @@ class VoteSGPGView(View):
 
     @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
-        check_already_voted(request)
+        if request.user.voted_for_all:
+            return redirect('voting:already_voted')
         candidates = Candidate.objects.filter(position__name=PositionName.SGPG.value).order_by('ballot_number')  # noqa
         context = {
             'position': PositionName.SGPG.value,
@@ -194,7 +215,9 @@ class VoteSGPGView(View):
 
     @method_decorator(MustLogin)
     def post(self, request, *args, **kwargs):
-        check_already_voted(request)  # check if voter has already voted
+        if request.user.voted_for_all:
+            # check if voter has already voted
+            return redirect('voting:already_voted')
         # already voted for this portfolio
         if request.user.voted_for_sgpg:
             messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
@@ -216,7 +239,8 @@ class VoteDHPBView(View):
 
     @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
-        check_already_voted(request)
+        if request.user.voted_for_all:
+            return redirect('voting:already_voted')
         candidates = Candidate.objects.filter(position__name=PositionName.DHPB.value).order_by('ballot_number')  # noqa
         context = {
             'position': PositionName.DHPB.value,
@@ -226,7 +250,9 @@ class VoteDHPBView(View):
 
     @method_decorator(MustLogin)
     def post(self, request, *args, **kwargs):
-        check_already_voted(request)  # check if voter has already voted
+        if request.user.voted_for_all:
+            # check if voter has already voted
+            return redirect('voting:already_voted')
         # already voted for this portfolio
         if request.user.voted_for_dhpb:
             messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
@@ -248,7 +274,8 @@ class VoteDHPGView(View):
 
     @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
-        check_already_voted(request)
+        if request.user.voted_for_all:
+            return redirect('voting:already_voted')
         candidates = Candidate.objects.filter(position__name=PositionName.DHPG.value).order_by('ballot_number')  # noqa
         context = {
             'position': PositionName.DHPG.value,
@@ -258,7 +285,9 @@ class VoteDHPGView(View):
 
     @method_decorator(MustLogin)
     def post(self, request, *args, **kwargs):
-        check_already_voted(request)  # check if voter has already voted
+        if request.user.voted_for_all:
+            # check if voter has already voted
+            return redirect('voting:already_voted')
         # already voted for this portfolio
         if request.user.voted_for_dhpg:
             messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
@@ -280,7 +309,8 @@ class VoteECPBView(View):
 
     @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
-        check_already_voted(request)
+        if request.user.voted_for_all:
+            return redirect('voting:already_voted')
         candidates = Candidate.objects.filter(position__name=PositionName.ECPB.value).order_by('ballot_number')  # noqa
         context = {
             'position': PositionName.ECPB.value,
@@ -290,7 +320,9 @@ class VoteECPBView(View):
 
     @method_decorator(MustLogin)
     def post(self, request, *args, **kwargs):
-        check_already_voted(request)  # check if voter has already voted
+        if request.user.voted_for_all:
+            # check if voter has already voted
+            return redirect('voting:already_voted')
         # already voted for this portfolio
         if request.user.voted_for_ecpb:
             messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
@@ -312,7 +344,8 @@ class VoteECPGView(View):
 
     @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
-        check_already_voted(request)
+        if request.user.voted_for_all:
+            return redirect('voting:already_voted')
         candidates = Candidate.objects.filter(position__name=PositionName.ECPG.value).order_by('ballot_number')  # noqa
         context = {
             'position': PositionName.ECPG.value,
@@ -322,7 +355,9 @@ class VoteECPGView(View):
 
     @method_decorator(MustLogin)
     def post(self, request, *args, **kwargs):
-        check_already_voted(request)  # check if voter has already voted
+        if request.user.voted_for_all:
+            # check if voter has already voted
+            return redirect('voting:already_voted')
         # already voted for this portfolio
         if request.user.voted_for_ecpg:
             messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
@@ -344,7 +379,8 @@ class VoteLPBView(View):
 
     @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
-        check_already_voted(request)
+        if request.user.voted_for_all:
+            return redirect('voting:already_voted')
         candidates = Candidate.objects.filter(position__name=PositionName.LPB.value).order_by('ballot_number')  # noqa
         context = {
             'position': PositionName.LPB.value,
@@ -354,7 +390,9 @@ class VoteLPBView(View):
 
     @method_decorator(MustLogin)
     def post(self, request, *args, **kwargs):
-        check_already_voted(request)  # check if voter has already voted
+        if request.user.voted_for_all:
+            # check if voter has already voted
+            return redirect('voting:already_voted')
         # already voted for this portfolio
         if request.user.voted_for_lpb:
             messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
@@ -376,7 +414,8 @@ class VoteLPGView(View):
 
     @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
-        check_already_voted(request)
+        if request.user.voted_for_all:
+            return redirect('voting:already_voted')
         candidates = Candidate.objects.filter(position__name=PositionName.LPG.value).order_by('ballot_number')  # noqa
         context = {
             'position': PositionName.LPG.value,
@@ -386,7 +425,9 @@ class VoteLPGView(View):
 
     @method_decorator(MustLogin)
     def post(self, request, *args, **kwargs):
-        check_already_voted(request)  # check if voter has already voted
+        if request.user.voted_for_all:
+            # check if voter has already voted
+            return redirect('voting:already_voted')
         # already voted for this portfolio
         if request.user.voted_for_lpg:
             messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
@@ -408,7 +449,8 @@ class VoteCSBView(View):
 
     @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
-        check_already_voted(request)
+        if request.user.voted_for_all:
+            return redirect('voting:already_voted')
         candidates = Candidate.objects.filter(position__name=PositionName.CSB.value).order_by('ballot_number')  # noqa
         context = {
             'position': PositionName.CSB.value,
@@ -418,7 +460,9 @@ class VoteCSBView(View):
 
     @method_decorator(MustLogin)
     def post(self, request, *args, **kwargs):
-        check_already_voted(request)  # check if voter has already voted
+        if request.user.voted_for_all:
+            # check if voter has already voted
+            return redirect('voting:already_voted')
         # already voted for this portfolio
         if request.user.voted_for_csb:
             messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
@@ -440,7 +484,8 @@ class VoteCSGView(View):
 
     @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
-        check_already_voted(request)
+        if request.user.voted_for_all:
+            return redirect('voting:already_voted')
         candidates = Candidate.objects.filter(position__name=PositionName.CSG.value).order_by('ballot_number')  # noqa
         context = {
             'position': PositionName.CSG.value,
@@ -450,7 +495,9 @@ class VoteCSGView(View):
 
     @method_decorator(MustLogin)
     def post(self, request, *args, **kwargs):
-        check_already_voted(request)  # check if voter has already voted
+        if request.user.voted_for_all:
+            # check if voter has already voted
+            return redirect('voting:already_voted')
         # already voted for this portfolio
         if request.user.voted_for_csg:
             messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
@@ -472,7 +519,8 @@ class VotePPBView(View):
 
     @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
-        check_already_voted(request)
+        if request.user.voted_for_all:
+            return redirect('voting:already_voted')
         candidates = Candidate.objects.filter(position__name=PositionName.PPB.value).order_by('ballot_number')  # noqa
         context = {
             'position': PositionName.PPB.value,
@@ -482,7 +530,9 @@ class VotePPBView(View):
 
     @method_decorator(MustLogin)
     def post(self, request, *args, **kwargs):
-        check_already_voted(request)  # check if voter has already voted
+        if request.user.voted_for_all:
+            # check if voter has already voted
+            return redirect('voting:already_voted')
         # already voted for this portfolio
         if request.user.voted_for_ppb:
             messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
@@ -492,10 +542,10 @@ class VotePPBView(View):
         # vote
         candidate.vote_count += 1
         candidate.save()
-        request.user.voted_for_csg = True
+        request.user.voted_for_ppb = True
         request.user.save()
         messages.success(request, 'Vote Successful, Proceed to next portfolio.')  # noqa
-        return redirect('voting:vote_ppb')
+        return redirect('voting:vote_ppg')
 
 
 class VotePPGView(View):
@@ -504,7 +554,8 @@ class VotePPGView(View):
 
     @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
-        check_already_voted(request)
+        if request.user.voted_for_all:
+            return redirect('voting:already_voted')
         candidates = Candidate.objects.filter(position__name=PositionName.PPG.value).order_by('ballot_number')  # noqa
         context = {
             'position': PositionName.PPG.value,
@@ -514,7 +565,9 @@ class VotePPGView(View):
 
     @method_decorator(MustLogin)
     def post(self, request, *args, **kwargs):
-        check_already_voted(request)  # check if voter has already voted
+        if request.user.voted_for_all:
+            # check if voter has already voted
+            return redirect('voting:already_voted')
         # already voted for this portfolio
         if request.user.voted_for_ppg:
             messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
@@ -536,7 +589,8 @@ class VoteHSPBView(View):
 
     @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
-        check_already_voted(request)
+        if request.user.voted_for_all:
+            return redirect('voting:already_voted')
         candidates = Candidate.objects.filter(position__name=PositionName.HSPB.value).order_by('ballot_number')  # noqa
         context = {
             'position': PositionName.HSPB.value,
@@ -546,7 +600,9 @@ class VoteHSPBView(View):
 
     @method_decorator(MustLogin)
     def post(self, request, *args, **kwargs):
-        check_already_voted(request)  # check if voter has already voted
+        if request.user.voted_for_all:
+            # check if voter has already voted
+            return redirect('voting:already_voted')
         # already voted for this portfolio
         if request.user.voted_for_hspb:
             messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
@@ -568,7 +624,8 @@ class VoteHSPGView(View):
 
     @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
-        check_already_voted(request)
+        if request.user.voted_for_all:
+            return redirect('voting:already_voted')
         candidates = Candidate.objects.filter(position__name=PositionName.HSPG.value).order_by('ballot_number')  # noqa
         context = {
             'position': PositionName.HSPG.value,
@@ -578,7 +635,9 @@ class VoteHSPGView(View):
 
     @method_decorator(MustLogin)
     def post(self, request, *args, **kwargs):
-        check_already_voted(request)  # check if voter has already voted
+        if request.user.voted_for_all:
+            # check if voter has already voted
+            return redirect('voting:already_voted')
         # already voted for this portfolio
         if request.user.voted_for_hspg:
             messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
@@ -592,6 +651,79 @@ class VoteHSPGView(View):
         request.user.save()
         messages.success(request, 'Vote Successful, Proceed to next portfolio.')  # noqa
         return redirect('voting:vote_hpb')
+
+
+class VoteHPBView(View):
+    '''Implements voting for HOUSE PREFECT - BOYS'''
+    template = 'voting/vote.html'
+
+    @method_decorator(MustLogin)
+    def get(self, request, *args, **kwargs):
+        if request.user.voted_for_all:
+            return redirect('voting:already_voted')
+        candidates = Candidate.objects.filter(position__name=PositionName.HPB.value, house=request.user.house, sex=Sex.M.value).order_by('ballot_number')  # noqa
+        context = {
+            'position': PositionName.HPB.value,
+            'candidates': candidates,
+        }
+        return render(request, self.template, context)
+
+    @method_decorator(MustLogin)
+    def post(self, request, *args, **kwargs):
+        if request.user.voted_for_all:
+            # check if voter has already voted
+            return redirect('voting:already_voted')
+        # already voted for this portfolio
+        if request.user.voted_for_hpb:
+            messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
+            return redirect('voting:vote_hpg')
+        candidate_id = request.POST.get('candidate_id')
+        candidate = Candidate.objects.filter(
+            position__name=PositionName.HPB.value, house=request.user.house, sex=Sex.M.value, id=candidate_id).first()
+        # vote
+        candidate.vote_count += 1
+        candidate.save()
+        request.user.voted_for_hpb = True
+        request.user.save()
+        messages.success(request, 'Vote Successful, Proceed to next portfolio.')  # noqa
+        return redirect('voting:vote_hpg')
+
+
+class VoteHPGView(View):
+    '''Implements voting for HOUSE PREFECT - GIRLS'''
+    template = 'voting/vote.html'
+
+    @method_decorator(MustLogin)
+    def get(self, request, *args, **kwargs):
+        if request.user.voted_for_all:
+            return redirect('voting:already_voted')
+        candidates = Candidate.objects.filter(position__name=PositionName.HPG.value, house=request.user.house, sex=Sex.F.value).order_by('ballot_number')  # noqa
+        context = {
+            'position': PositionName.HPG.value,
+            'candidates': candidates,
+        }
+        return render(request, self.template, context)
+
+    @method_decorator(MustLogin)
+    def post(self, request, *args, **kwargs):
+        if request.user.voted_for_all:
+            # check if voter has already voted
+            return redirect('voting:already_voted')
+        # already voted for this portfolio
+        if request.user.voted_for_hpg:
+            messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
+            return redirect('voting:vote_completed')
+        candidate_id = request.POST.get('candidate_id')
+        candidate = Candidate.objects.filter(
+            position__name=PositionName.HPG.value, house=request.user.house, sex=Sex.F.value, id=candidate_id).first()
+        # vote
+        candidate.vote_count += 1
+        candidate.save()
+        request.user.voted_for_hpg = True
+        vote_for_all(request)
+        request.user.save()
+        messages.success(request, 'Vote Successful, Proceed to next portfolio.')  # noqa
+        return redirect('voting:vote_completed')
 
 
 class VoteCompletedView(View):
