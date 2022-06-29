@@ -28,6 +28,30 @@
             Please this field is required.
         </div>
     </div>
+    <div class="form-group mt-3">
+        <label for="house">House <span class="text text-danger">*</span></label>
+        <select name="house" id="house" class="form-control">
+            <option value="---">---Select House---</option>
+            <option value="ASANTE" {% if voter.house == "ASANTE" %} selected {% endif %}>ASANTE</option>
+            <option value="BOTWE" {% if voter.house == "BOTWE" %} selected {% endif %}>BOTWE</option>
+            <option value="KALEDZI" {% if voter.house == "KALEDZI" %} selected {% endif %}>KALEDZI</option>
+            <option value="KUMI" {% if voter.house == "KUMI" %} selected {% endif %}>KUMI</option>
+        </select>
+        <div class="invalid-feedback">
+            Please this field is required.
+        </div>
+    </div>
+    <div class="form-group mt-3">
+        <label for="sex">Sex <span class="text text-danger">*</span></label>
+        <select name="sex" id="sex" class="form-control">
+            <option value="---">---Select Sex---</option>
+            <option value="F" {% if voter.sex == "F" %} selected {% endif %}>F</option>
+            <option value="M" {% if voter.sex == "M" %} selected {% endif %}>M</option>
+        </select>
+        <div class="invalid-feedback">
+            Please this field is required.
+        </div>
+    </div>
 
     <div class="form-group my-3">
         <button type="submit" class="btn btn-primary">Submit</button>
