@@ -32,15 +32,19 @@ class Candidate(models.Model):
         '''Returns the percentage of (YES) votes for a candidate'''
         if self.vote_count == 0:
             return 0
-        else:
+        if self.position.get_votes_cast() == 0:
+            return 0
+        if self.no_votes_count == 0:
             return round((self.vote_count / self.position.get_votes_cast()) * 100, 2)  # noqa
+        else:
+            return round(self.vote_count / (self.vote_count + self.no_votes_count) * 100, 2)  # noqa
 
     def get_no_vote_percentage(self):
         '''Returns the percentage of NO votes for a candidate'''
         if self.no_votes_count == 0:
             return 0
         else:
-            return round((self.vote_count / self.position.get_votes_cast()) * 100, 2)  # noqa
+            return round((self.no_votes_count / (self.vote_count + self.no_votes_count)) * 100, 2)  # noqa
 
     def __str__(self):
         return self.name
