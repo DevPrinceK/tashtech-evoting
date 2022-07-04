@@ -478,12 +478,14 @@
                                 new Chart(document.querySelector('#lpb'), {
                                     type: 'doughnut',
                                     data: {
-                                        labels: [{% for i in lpb %} '{{i.name}}', {% endfor %}],
+                                        labels: ['Yes Votes', 'No Votes'],
                                         datasets: [{
                                             label: 'Library Prefect',
-                                            data: [{% for i in lpb %} '{{i.vote_count}}', {% endfor %}],
+                                            // NOTE
+                                            data: [{{lpb.vote_count}}, {{lpb.no_votes_count}}],
                                             backgroundColor: [
                                                 'gold',
+                                                'red',
                                                 'blue',
                                                 'violet',
                                                 'indigo',
@@ -510,12 +512,13 @@
                                 new Chart(document.querySelector('#lpg'), {
                                     type: 'doughnut',
                                     data: {
-                                        labels: [{% for i in lpg %} '{{i.name}}', {% endfor %}],
+                                        labels: ['Yes Votes', 'No Votes'],
                                         datasets: [{
                                             label: 'Library Prefect',
-                                            data: [{% for i in lpg %} '{{i.vote_count}}', {% endfor %}],
+                                            data: [{{lpb.vote_count}}, {{lpb.no_votes_count}}],
                                             backgroundColor: [
                                                 'gold',
+                                                'red',
                                                 'blue',
                                                 'violet',
                                                 'indigo',
@@ -542,12 +545,13 @@
                                 new Chart(document.querySelector('#csb'), {
                                     type: 'doughnut',
                                     data: {
-                                        labels: [{% for i in csb %} '{{i.name}}', {% endfor %}],
+                                        labels: ['Yes Votes', 'No Votes'],
                                         datasets: [{
                                             label: 'Chapel Stewards',
-                                            data: [{% for i in csb %} '{{i.vote_count}}', {% endfor %}],
+                                            data: [{{csb.vote_count}}, {{csb.no_votes_count}}],
                                             backgroundColor: [
                                                 'gold',
+                                                'red',
                                                 'blue',
                                                 'violet',
                                                 'indigo',
@@ -574,12 +578,13 @@
                                 new Chart(document.querySelector('#csg'), {
                                     type: 'doughnut',
                                     data: {
-                                        labels: [{% for i in csg %} '{{i.name}}', {% endfor %}],
+                                        labels: ['Yes Votes', 'No Votes'],
                                         datasets: [{
                                             label: 'Chapel Stewards',
-                                            data: [{% for i in csg %} '{{i.vote_count}}', {% endfor %}],
+                                            data: [{{csg.vote_count}}, {{csg.no_votes_count}}],
                                             backgroundColor: [
                                                 'gold',
+                                                'red',
                                                 'blue',
                                                 'violet',
                                                 'indigo',
@@ -702,17 +707,11 @@
                                 new Chart(document.querySelector('#hspg'), {
                                     type: 'doughnut',
                                     data: {
-                                        labels: [{% for i in hspg %} '{{i.name}}', {% endfor %}],
+                                        labels: ['Yes Votes', 'No Votes'],
                                         datasets: [{
                                             label: 'Health and Sanitation',
-                                            data: [{% for i in hspg %} '{{i.vote_count}}', {% endfor %}],
-                                            backgroundColor: [
-                                                'gold',
-                                                'blue',
-                                                'violet',
-                                                'indigo',
-                                                'green',
-                                            ],
+                                            data: [{{hspg.vote_count}}, {{hspg.no_votes_count}}],
+                                            backgroundColor: ['gold','red'],
                                             hoverOffset: 4
                                         }]
                                     }
@@ -734,12 +733,13 @@
                                 new Chart(document.querySelector('#hpba'), {
                                     type: 'doughnut',
                                     data: {
-                                        labels: [{% for i in hpba %} '{{i.name}}', {% endfor %}],
+                                        labels: ['Yes Votes', 'No Votes'],
                                         datasets: [{
                                             label: 'House Prefect',
-                                            data: [{% for i in hpba %} '{{i.vote_count}}', {% endfor %}],
+                                            data: [{{hpba.vote_count}}, {{hpba.no_votes_count}}],
                                             backgroundColor: [
                                                 'gold',
+                                                'red',
                                                 'blue',
                                                 'violet',
                                                 'indigo',
@@ -766,12 +766,13 @@
                                 new Chart(document.querySelector('#hpga'), {
                                     type: 'doughnut',
                                     data: {
-                                        labels: [{% for i in hpga %} '{{i.name}}', {% endfor %}],
+                                        labels: ['Yes Votes', 'No Votes'],
                                         datasets: [{
                                             label: 'House Prefect',
-                                            data: [{% for i in hpga %} '{{i.vote_count}}', {% endfor %}],
+                                            data: [{{hpga.vote_count}}, {{hpga.no_votes_count}}],
                                             backgroundColor: [
                                                 'gold',
+                                                'red',
                                                 'blue',
                                                 'violet',
                                                 'indigo',
@@ -798,12 +799,13 @@
                                 new Chart(document.querySelector('#hpbb'), {
                                     type: 'doughnut',
                                     data: {
-                                        labels: [{% for i in hpbb %} '{{i.name}}', {% endfor %}],
+                                        labels: ['Yes Votes', 'No Votes'],
                                         datasets: [{
                                             label: 'House Prefect',
-                                            data: [{% for i in hpbb %} '{{i.vote_count}}', {% endfor %}],
+                                            data: [{{hpbb.vote_count}}, {{hpbb.no_votes_count}}],
                                             backgroundColor: [
                                                 'gold',
+                                                'red',
                                                 'blue',
                                                 'violet',
                                                 'indigo',
@@ -830,12 +832,13 @@
                                 new Chart(document.querySelector('#hpgb'), {
                                     type: 'doughnut',
                                     data: {
-                                        labels: [{% for i in hpgb %} '{{i.name}}', {% endfor %}],
+                                        labels: ['Yes Votes', 'No Votes'],
                                         datasets: [{
                                             label: 'House Prefect',
-                                            data: [{% for i in hpgb %} '{{i.vote_count}}', {% endfor %}],
+                                            data: [{{hpgb.vote_count}}, {{hpgb.no_votes_count}}],
                                             backgroundColor: [
                                                 'gold',
+                                                'red',
                                                 'blue',
                                                 'violet',
                                                 'indigo',
@@ -862,12 +865,13 @@
                                 new Chart(document.querySelector('#hpbka'), {
                                     type: 'doughnut',
                                     data: {
-                                        labels: [{% for i in hpbka %} '{{i.name}}', {% endfor %}],
+                                        labels: ['Yes Votes', 'No Votes'],
                                         datasets: [{
                                             label: 'House Prefect',
-                                            data: [{% for i in hpbka %} '{{i.vote_count}}', {% endfor %}],
+                                            data: [{{hpbka.vote_count}}, {{hpbka.no_votes_count}}],
                                             backgroundColor: [
                                                 'gold',
+                                                'red',
                                                 'blue',
                                                 'violet',
                                                 'indigo',
@@ -894,12 +898,13 @@
                                 new Chart(document.querySelector('#hpgka'), {
                                     type: 'doughnut',
                                     data: {
-                                        labels: [{% for i in hpgka %} '{{i.name}}', {% endfor %}],
+                                        labels: ['Yes Votes', 'No Votes'],
                                         datasets: [{
                                             label: 'House Prefect',
-                                            data: [{% for i in hpgka %} '{{i.vote_count}}', {% endfor %}],
+                                            data: [{{hpgka.vote_count}}, {{hpgka.no_votes_count}}],
                                             backgroundColor: [
                                                 'gold',
+                                                'red',
                                                 'blue',
                                                 'violet',
                                                 'indigo',
