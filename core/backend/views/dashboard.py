@@ -31,26 +31,26 @@ class IndexView(View):
         ecpb = Candidate.objects.filter(position__name=PositionName.ECPB.value).order_by('ballot_number')  # noqa
         ecpg = Candidate.objects.filter(position__name=PositionName.ECPG.value).order_by('ballot_number')  # noqa
 
-        lpb = Candidate.objects.filter(position__name=PositionName.LPB.value).order_by('ballot_number')  # noqa
-        lpg = Candidate.objects.filter(position__name=PositionName.LPG.value).order_by('ballot_number')  # noqa
+        lpb = Candidate.objects.filter(position__name=PositionName.LPB.value).order_by('ballot_number').first()  # noqa
+        lpg = Candidate.objects.filter(position__name=PositionName.LPG.value).order_by('ballot_number').first()  # noqa
 
-        csb = Candidate.objects.filter(position__name=PositionName.CSB.value).order_by('ballot_number')  # noqa
-        csg = Candidate.objects.filter(position__name=PositionName.CSG.value).order_by('ballot_number')  # noqa
+        csb = Candidate.objects.filter(position__name=PositionName.CSB.value).order_by('ballot_number').first()  # noqa
+        csg = Candidate.objects.filter(position__name=PositionName.CSG.value).order_by('ballot_number').first()  # noqa
 
         ppb = Candidate.objects.filter(position__name=PositionName.PPB.value).order_by('ballot_number')  # noqa
         ppg = Candidate.objects.filter(position__name=PositionName.PPG.value).order_by('ballot_number')  # noqa
 
         hspb = Candidate.objects.filter(position__name=PositionName.HSPB.value).order_by('ballot_number')  # noqa
-        hspg = Candidate.objects.filter(position__name=PositionName.HSPG.value).order_by('ballot_number')  # noqa
+        hspg = Candidate.objects.filter(position__name=PositionName.HSPG.value).order_by('ballot_number').first()  # noqa
 
-        hpba = Candidate.objects.filter(position__name=PositionName.HPB.value, house=House.ASANTE.value).order_by('ballot_number')  # noqa
-        hpga = Candidate.objects.filter(position__name=PositionName.HPG.value, house=House.ASANTE.value).order_by('ballot_number')  # noqa
+        hpba = Candidate.objects.filter(position__name=PositionName.HPB.value, house=House.ASANTE.value).order_by('ballot_number').first()  # noqa
+        hpga = Candidate.objects.filter(position__name=PositionName.HPG.value, house=House.ASANTE.value).order_by('ballot_number').first()  # noqa
 
-        hpbb = Candidate.objects.filter(position__name=PositionName.HPB.value, house=House.BOTWE.value).order_by('ballot_number')  # noqa
-        hpgb = Candidate.objects.filter(position__name=PositionName.HPG.value, house=House.BOTWE.value).order_by('ballot_number')  # noqa
+        hpbb = Candidate.objects.filter(position__name=PositionName.HPB.value, house=House.BOTWE.value).order_by('ballot_number').first()  # noqa
+        hpgb = Candidate.objects.filter(position__name=PositionName.HPG.value, house=House.BOTWE.value).order_by('ballot_number').first()  # noqa
 
-        hpbka = Candidate.objects.filter(position__name=PositionName.HPB.value, house=House.KALEDZI.value).order_by('ballot_number')  # noqa
-        hpgka = Candidate.objects.filter(position__name=PositionName.HPG.value, house=House.KALEDZI.value).order_by('ballot_number')  # noqa
+        hpbka = Candidate.objects.filter(position__name=PositionName.HPB.value, house=House.KALEDZI.value).order_by('ballot_number').first()  # noqa
+        hpgka = Candidate.objects.filter(position__name=PositionName.HPG.value, house=House.KALEDZI.value).order_by('ballot_number').first()  # noqa
 
         hpbku = Candidate.objects.filter(position__name=PositionName.HPB.value, house=House.KUMI.value).order_by('ballot_number')  # noqa
         hpgku = Candidate.objects.filter(position__name=PositionName.HPG.value, house=House.KUMI.value).order_by('ballot_number')  # noqa
