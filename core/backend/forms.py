@@ -7,7 +7,7 @@ class CandidateForm(forms.ModelForm):
     '''Facilitates creation and updation of candidates'''
     class Meta:
         model = Candidate
-        exclude = ['vote_count', 'position', 'created_at']
+        exclude = ['vote_count', 'position', 'created_at', 'no_votes_count']
 
 
 class PositionForm(forms.ModelForm):
