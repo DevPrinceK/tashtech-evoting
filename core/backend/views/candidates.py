@@ -18,7 +18,7 @@ class CandidatesListView(View):
 
     @method_decorator(AdminOnly)
     def get(self, request, *args, **kwargs):
-        context = {'candidates': Candidate.objects.all().order_by('ballot_number')}  # noqa
+        context = {'candidates': Candidate.objects.all().order_by('position__name', 'ballot_number')}  # noqa
         return render(request, self.template, context)
 
 
