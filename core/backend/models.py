@@ -25,6 +25,22 @@ class Candidate(models.Model):
     ballot_number = models.IntegerField(default=1)
     vote_count = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
+    # YES / NO VOTES
+    no_votes_count = models.IntegerField(default=0)  # for when voter is alone
+
+    def get_vote_percentage(self):
+        '''Returns the percentage of (YES) votes for a candidate'''
+        if self.vote_count == 0:
+            return 0
+        else:
+            return round((self.vote_count / self.position.get_votes_cast()) * 100, 2)  # noqa
+
+    def get_no_vote_percentage(self):
+        '''Returns the percentage of NO votes for a candidate'''
+        if self.no_votes_count == 0:
+            return 0
+        else:
+            return round((self.vote_count / self.position.get_votes_cast()) * 100, 2)  # noqa
 
     def __str__(self):
         return self.name
