@@ -42,3 +42,8 @@ urlpatterns += [
 urlpatterns += [
     path('verification/', views.VerificationView.as_view(), name='verification'),
 ]
+
+# Results
+urlpatterns += [
+    path('download-results-csv/', views.DownloadCandidateResultsAsCSVView.as_view(), name='download_results_csv'),  # noqa
+]
