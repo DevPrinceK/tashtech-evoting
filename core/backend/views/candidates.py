@@ -1,3 +1,4 @@
+import csv
 from django.contrib import messages
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.http import HttpResponseRedirect
@@ -5,6 +6,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.decorators import method_decorator
 from django.utils.html import strip_tags
 from django.views.generic import View
+from django.http.response import HttpResponse
 from backend.forms import CandidateForm
 
 from backend.models import Candidate, Position
@@ -83,3 +85,29 @@ class DeleteCandidateView(View):
         candidate.delete()
         messages.success(request, 'Candidate Deleted Successfully!')
         return redirect('backend:candidates')
+
+
+class DownloadCandidateResultsAsCSVView(View):
+    @method_decorator(AdminOnly)
+    def get(self, request, *args, **kwargs):
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="election_results.csv"'  # noqa
+
+        writer = csv.writer(response)
+        writer.writerow(
+            ['BALLOT NO.', 'POSITION', 'CANDIDATE', 'VOTES COUNT', 'NO VOTES', 'VOTE COUNT %', 'NO VOTES %'])  # noqa
+
+        candidates = Candidate.objects.all().order_by('position__name', 'ballot_number')  # noqa
+        for candidate in candidates:
+            writer.writerow(
+                [
+                    candidate.ballot_number,
+                    candidate.position.name,
+                    candidate.name,
+                    candidate.vote_count,
+                    candidate.no_votes_count,
+                    candidate.get_vote_percentage(),
+                    candidate.get_no_vote_percentage(),
+                ]
+            )
+        return response
