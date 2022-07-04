@@ -3,7 +3,7 @@ from django.views import View
 from django.utils.decorators import method_decorator
 from django.contrib import messages
 
-from backend.models import Candidate
+from backend.models import Candidate, Position
 from core.utils.decorators import MustLogin
 from core.utils.constants import PositionName, Sex
 from core.utils.utils import check_already_voted, vote_for_all
@@ -32,9 +32,15 @@ class VoteSPView(View):
             # check if voter has already voted
             return redirect('voting:already_voted')
         candidates = Candidate.objects.filter(position__name=PositionName.SP.value).order_by('ballot_number')  # noqa
+        # flag for yes or no vote
+        if candidates.count() == 1:
+            acclamation = True
+        else:
+            acclamation = False
         context = {
             'position': PositionName.SP.value,
             'candidates': candidates,
+            'acclamation': acclamation,
         }
         return render(request, self.template, context)
 
@@ -47,6 +53,18 @@ class VoteSPView(View):
         if request.user.voted_for_sp:
             messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
             return redirect('voting:vote_gp')
+        # acclamation vote
+        acclamation = True if request.POST.get('acclamation') is not None else False  # noqa
+        if acclamation:
+            candidate_id = request.POST.get('candidate_id')
+            candidate = Candidate.objects.filter(position__name=PositionName.SP.value, id=candidate_id).first()  # noqa
+            if candidate:
+                candidate.no_votes_count += 1
+                candidate.save()
+                request.user.voted_for_sp = True
+                request.user.save()
+                return redirect('voting:vote_gp')
+        # no acclamation
         candidate_id = request.POST.get('candidate_id')
         candidate = Candidate.objects.filter(position__name=PositionName.SP.value, id=candidate_id).first()  # noqa
         # vote
@@ -67,9 +85,15 @@ class VoteGPView(View):
         if request.user.voted_for_all:
             return redirect('voting:already_voted')
         candidates = Candidate.objects.filter(position__name=PositionName.GP.value).order_by('ballot_number')  # noqa
+        # flag for yes or no vote
+        if candidates.count() == 1:
+            acclamation = True
+        else:
+            acclamation = False
         context = {
             'position': PositionName.GP.value,
             'candidates': candidates,
+            'acclamation': acclamation,
         }
         return render(request, self.template, context)
 
@@ -82,6 +106,18 @@ class VoteGPView(View):
         if request.user.voted_for_gp:
             messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
             return redirect('voting:vote_cob')
+        # acclamation vote
+        acclamation = True if request.POST.get('acclamation') is not None else False  # noqa
+        if acclamation:
+            candidate_id = request.POST.get('candidate_id')
+            candidate = Candidate.objects.filter(position__name=PositionName.GP.value, id=candidate_id).first()  # noqa
+            if candidate:
+                candidate.no_votes_count += 1
+                candidate.save()
+                request.user.voted_for_gp = True
+                request.user.save()
+                return redirect('voting:vote_cob')
+        # no acclamation
         candidate_id = request.POST.get('candidate_id')
         candidate = Candidate.objects.filter(position__name=PositionName.GP.value, id=candidate_id).first()  # noqa
         # vote
@@ -102,9 +138,15 @@ class VoteCOBView(View):
         if request.user.voted_for_all:
             return redirect('voting:already_voted')
         candidates = Candidate.objects.filter(position__name=PositionName.COB.value).order_by('ballot_number')  # noqa
+        # flag for yes or no vote
+        if candidates.count() == 1:
+            acclamation = True
+        else:
+            acclamation = False
         context = {
             'position': PositionName.COB.value,
             'candidates': candidates,
+            'acclamation': acclamation,
         }
         return render(request, self.template, context)
 
@@ -117,6 +159,18 @@ class VoteCOBView(View):
         if request.user.voted_for_cob:
             messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
             return redirect('voting:vote_cog')
+        # acclamation vote
+        acclamation = True if request.POST.get('acclamation') is not None else False  # noqa
+        if acclamation:
+            candidate_id = request.POST.get('candidate_id')
+            candidate = Candidate.objects.filter(position__name=PositionName.COB.value, id=candidate_id).first()  # noqa
+            if candidate:
+                candidate.no_votes_count += 1
+                candidate.save()
+                request.user.voted_for_cob = True
+                request.user.save()
+                return redirect('voting:vote_cog')
+        # no acclamation
         candidate_id = request.POST.get('candidate_id')
         candidate = Candidate.objects.filter(position__name=PositionName.COB.value, id=candidate_id).first()  # noqa
         # vote
@@ -137,9 +191,15 @@ class VoteCOGView(View):
         if request.user.voted_for_all:
             return redirect('voting:already_voted')
         candidates = Candidate.objects.filter(position__name=PositionName.COG.value).order_by('ballot_number')  # noqa
+        # flag for yes or no vote
+        if candidates.count() == 1:
+            acclamation = True
+        else:
+            acclamation = False
         context = {
             'position': PositionName.COG.value,
             'candidates': candidates,
+            'acclamation': acclamation,
         }
         return render(request, self.template, context)
 
@@ -152,6 +212,18 @@ class VoteCOGView(View):
         if request.user.voted_for_cog:
             messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
             return redirect('voting:vote_sgpb')
+        # acclamation vote
+        acclamation = True if request.POST.get('acclamation') is not None else False  # noqa
+        if acclamation:
+            candidate_id = request.POST.get('candidate_id')
+            candidate = Candidate.objects.filter(position__name=PositionName.COG.value, id=candidate_id).first()  # noqa
+            if candidate:
+                candidate.no_votes_count += 1
+                candidate.save()
+                request.user.voted_for_cog = True
+                request.user.save()
+                return redirect('voting:vote_sgpb')
+        # no acclamation
         candidate_id = request.POST.get('candidate_id')
         candidate = Candidate.objects.filter(position__name=PositionName.COG.value, id=candidate_id).first()  # noqa
         # vote
@@ -172,9 +244,15 @@ class VoteSGPBView(View):
         if request.user.voted_for_all:
             return redirect('voting:already_voted')
         candidates = Candidate.objects.filter(position__name=PositionName.SGPB.value).order_by('ballot_number')  # noqa
+        # flag for yes or no vote
+        if candidates.count() == 1:
+            acclamation = True
+        else:
+            acclamation = False
         context = {
             'position': PositionName.SGPB.value,
             'candidates': candidates,
+            'acclamation': acclamation,
         }
         return render(request, self.template, context)
 
@@ -187,6 +265,18 @@ class VoteSGPBView(View):
         if request.user.voted_for_sgpb:
             messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
             return redirect('voting:vote_sgpg')
+        # acclamation vote
+        acclamation = True if request.POST.get('acclamation') is not None else False  # noqa
+        if acclamation:
+            candidate_id = request.POST.get('candidate_id')
+            candidate = Candidate.objects.filter(position__name=PositionName.SGPB.value, id=candidate_id).first()  # noqa
+            if candidate:
+                candidate.no_votes_count += 1
+                candidate.save()
+                request.user.voted_for_sgpb = True
+                request.user.save()
+                return redirect('voting:vote_sgpg')
+        # no acclamation
         candidate_id = request.POST.get('candidate_id')
         candidate = Candidate.objects.filter(position__name=PositionName.SGPB.value, id=candidate_id).first()  # noqa
         # vote
@@ -207,9 +297,15 @@ class VoteSGPGView(View):
         if request.user.voted_for_all:
             return redirect('voting:already_voted')
         candidates = Candidate.objects.filter(position__name=PositionName.SGPG.value).order_by('ballot_number')  # noqa
+        # flag for yes or no vote
+        if candidates.count() == 1:
+            acclamation = True
+        else:
+            acclamation = False
         context = {
             'position': PositionName.SGPG.value,
             'candidates': candidates,
+            'acclamation': acclamation,
         }
         return render(request, self.template, context)
 
@@ -222,6 +318,18 @@ class VoteSGPGView(View):
         if request.user.voted_for_sgpg:
             messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
             return redirect('voting:vote_dhpb')
+        # acclamation vote
+        acclamation = True if request.POST.get('acclamation') is not None else False  # noqa
+        if acclamation:
+            candidate_id = request.POST.get('candidate_id')
+            candidate = Candidate.objects.filter(position__name=PositionName.SGPG.value, id=candidate_id).first()  # noqa
+            if candidate:
+                candidate.no_votes_count += 1
+                candidate.save()
+                request.user.voted_for_sgpg = True
+                request.user.save()
+                return redirect('voting:vote_dhpb')
+        # no acclamation
         candidate_id = request.POST.get('candidate_id')
         candidate = Candidate.objects.filter(position__name=PositionName.SGPG.value, id=candidate_id).first()  # noqa
         # vote
@@ -242,9 +350,15 @@ class VoteDHPBView(View):
         if request.user.voted_for_all:
             return redirect('voting:already_voted')
         candidates = Candidate.objects.filter(position__name=PositionName.DHPB.value).order_by('ballot_number')  # noqa
+        # flag for yes or no vote
+        if candidates.count() == 1:
+            acclamation = True
+        else:
+            acclamation = False
         context = {
             'position': PositionName.DHPB.value,
             'candidates': candidates,
+            'acclamation': acclamation,
         }
         return render(request, self.template, context)
 
@@ -257,6 +371,18 @@ class VoteDHPBView(View):
         if request.user.voted_for_dhpb:
             messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
             return redirect('voting:vote_dhpg')
+        # acclamation vote
+        acclamation = True if request.POST.get('acclamation') is not None else False  # noqa
+        if acclamation:
+            candidate_id = request.POST.get('candidate_id')
+            candidate = Candidate.objects.filter(position__name=PositionName.DHPB.value, id=candidate_id).first()  # noqa
+            if candidate:
+                candidate.no_votes_count += 1
+                candidate.save()
+                request.user.voted_for_dhpb = True
+                request.user.save()
+                return redirect('voting:vote_dhpg')
+        # no acclamation
         candidate_id = request.POST.get('candidate_id')
         candidate = Candidate.objects.filter(position__name=PositionName.DHPB.value, id=candidate_id).first()  # noqa
         # vote
@@ -277,9 +403,15 @@ class VoteDHPGView(View):
         if request.user.voted_for_all:
             return redirect('voting:already_voted')
         candidates = Candidate.objects.filter(position__name=PositionName.DHPG.value).order_by('ballot_number')  # noqa
+        # flag for yes or no vote
+        if candidates.count() == 1:
+            acclamation = True
+        else:
+            acclamation = False
         context = {
             'position': PositionName.DHPG.value,
             'candidates': candidates,
+            'acclamation': acclamation,
         }
         return render(request, self.template, context)
 
@@ -292,6 +424,18 @@ class VoteDHPGView(View):
         if request.user.voted_for_dhpg:
             messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
             return redirect('voting:vote_ecpb')
+        # acclamation vote
+        acclamation = True if request.POST.get('acclamation') is not None else False  # noqa
+        if acclamation:
+            candidate_id = request.POST.get('candidate_id')
+            candidate = Candidate.objects.filter(position__name=PositionName.DHPG.value, id=candidate_id).first()  # noqa
+            if candidate:
+                candidate.no_votes_count += 1
+                candidate.save()
+                request.user.voted_for_dhpg = True
+                request.user.save()
+                return redirect('voting:vote_ecpb')
+        # no acclamation
         candidate_id = request.POST.get('candidate_id')
         candidate = Candidate.objects.filter(position__name=PositionName.DHPG.value, id=candidate_id).first()  # noqa
         # vote
@@ -312,9 +456,15 @@ class VoteECPBView(View):
         if request.user.voted_for_all:
             return redirect('voting:already_voted')
         candidates = Candidate.objects.filter(position__name=PositionName.ECPB.value).order_by('ballot_number')  # noqa
+        # flag for yes or no vote
+        if candidates.count() == 1:
+            acclamation = True
+        else:
+            acclamation = False
         context = {
             'position': PositionName.ECPB.value,
             'candidates': candidates,
+            'acclamation': acclamation,
         }
         return render(request, self.template, context)
 
@@ -327,6 +477,18 @@ class VoteECPBView(View):
         if request.user.voted_for_ecpb:
             messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
             return redirect('voting:vote_ecpg')
+        # acclamation vote
+        acclamation = True if request.POST.get('acclamation') is not None else False  # noqa
+        if acclamation:
+            candidate_id = request.POST.get('candidate_id')
+            candidate = Candidate.objects.filter(position__name=PositionName.ECPB.value, id=candidate_id).first()  # noqa
+            if candidate:
+                candidate.no_votes_count += 1
+                candidate.save()
+                request.user.voted_for_ecpb = True
+                request.user.save()
+                return redirect('voting:vote_ecpg')
+        # no acclamation
         candidate_id = request.POST.get('candidate_id')
         candidate = Candidate.objects.filter(position__name=PositionName.ECPB.value, id=candidate_id).first()  # noqa
         # vote
@@ -347,9 +509,15 @@ class VoteECPGView(View):
         if request.user.voted_for_all:
             return redirect('voting:already_voted')
         candidates = Candidate.objects.filter(position__name=PositionName.ECPG.value).order_by('ballot_number')  # noqa
+        # flag for yes or no vote
+        if candidates.count() == 1:
+            acclamation = True
+        else:
+            acclamation = False
         context = {
             'position': PositionName.ECPG.value,
             'candidates': candidates,
+            'acclamation': acclamation,
         }
         return render(request, self.template, context)
 
@@ -362,6 +530,18 @@ class VoteECPGView(View):
         if request.user.voted_for_ecpg:
             messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
             return redirect('voting:vote_lpb')
+        # acclamation vote
+        acclamation = True if request.POST.get('acclamation') is not None else False  # noqa
+        if acclamation:
+            candidate_id = request.POST.get('candidate_id')
+            candidate = Candidate.objects.filter(position__name=PositionName.ECPG.value, id=candidate_id).first()  # noqa
+            if candidate:
+                candidate.no_votes_count += 1
+                candidate.save()
+                request.user.voted_for_ecpg = True
+                request.user.save()
+                return redirect('voting:vote_lpb')
+        # no acclamation
         candidate_id = request.POST.get('candidate_id')
         candidate = Candidate.objects.filter(position__name=PositionName.ECPG.value, id=candidate_id).first()  # noqa
         # vote
@@ -382,9 +562,15 @@ class VoteLPBView(View):
         if request.user.voted_for_all:
             return redirect('voting:already_voted')
         candidates = Candidate.objects.filter(position__name=PositionName.LPB.value).order_by('ballot_number')  # noqa
+        # flag for yes or no vote
+        if candidates.count() == 1:
+            acclamation = True
+        else:
+            acclamation = False
         context = {
             'position': PositionName.LPB.value,
             'candidates': candidates,
+            'acclamation': acclamation,
         }
         return render(request, self.template, context)
 
@@ -397,6 +583,18 @@ class VoteLPBView(View):
         if request.user.voted_for_lpb:
             messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
             return redirect('voting:vote_lpg')
+        # acclamation vote
+        acclamation = True if request.POST.get('acclamation') is not None else False  # noqa
+        if acclamation:
+            candidate_id = request.POST.get('candidate_id')
+            candidate = Candidate.objects.filter(position__name=PositionName.LPB.value, id=candidate_id).first()  # noqa
+            if candidate:
+                candidate.no_votes_count += 1
+                candidate.save()
+                request.user.voted_for_lpb = True
+                request.user.save()
+                return redirect('voting:vote_lpg')
+        # no acclamation
         candidate_id = request.POST.get('candidate_id')
         candidate = Candidate.objects.filter(position__name=PositionName.LPB.value, id=candidate_id).first()  # noqa
         # vote
@@ -417,9 +615,15 @@ class VoteLPGView(View):
         if request.user.voted_for_all:
             return redirect('voting:already_voted')
         candidates = Candidate.objects.filter(position__name=PositionName.LPG.value).order_by('ballot_number')  # noqa
+        # flag for yes or no vote
+        if candidates.count() == 1:
+            acclamation = True
+        else:
+            acclamation = False
         context = {
             'position': PositionName.LPG.value,
             'candidates': candidates,
+            'acclamation': acclamation,
         }
         return render(request, self.template, context)
 
@@ -432,6 +636,18 @@ class VoteLPGView(View):
         if request.user.voted_for_lpg:
             messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
             return redirect('voting:vote_csb')
+        # acclamation vote
+        acclamation = True if request.POST.get('acclamation') is not None else False  # noqa
+        if acclamation:
+            candidate_id = request.POST.get('candidate_id')
+            candidate = Candidate.objects.filter(position__name=PositionName.LPG.value, id=candidate_id).first()  # noqa
+            if candidate:
+                candidate.no_votes_count += 1
+                candidate.save()
+                request.user.voted_for_lpg = True
+                request.user.save()
+                return redirect('voting:vote_csb')
+        # no acclamation
         candidate_id = request.POST.get('candidate_id')
         candidate = Candidate.objects.filter(position__name=PositionName.LPG.value, id=candidate_id).first()  # noqa
         # vote
@@ -452,9 +668,15 @@ class VoteCSBView(View):
         if request.user.voted_for_all:
             return redirect('voting:already_voted')
         candidates = Candidate.objects.filter(position__name=PositionName.CSB.value).order_by('ballot_number')  # noqa
+        # flag for yes or no vote
+        if candidates.count() == 1:
+            acclamation = True
+        else:
+            acclamation = False
         context = {
             'position': PositionName.CSB.value,
             'candidates': candidates,
+            'acclamation': acclamation,
         }
         return render(request, self.template, context)
 
@@ -467,6 +689,18 @@ class VoteCSBView(View):
         if request.user.voted_for_csb:
             messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
             return redirect('voting:vote_csg')
+        # acclamation vote
+        acclamation = True if request.POST.get('acclamation') is not None else False  # noqa
+        if acclamation:
+            candidate_id = request.POST.get('candidate_id')
+            candidate = Candidate.objects.filter(position__name=PositionName.CSB.value, id=candidate_id).first()  # noqa
+            if candidate:
+                candidate.no_votes_count += 1
+                candidate.save()
+                request.user.voted_for_csb = True
+                request.user.save()
+                return redirect('voting:vote_csg')
+        # no acclamation
         candidate_id = request.POST.get('candidate_id')
         candidate = Candidate.objects.filter(position__name=PositionName.CSB.value, id=candidate_id).first()  # noqa
         # vote
@@ -487,9 +721,15 @@ class VoteCSGView(View):
         if request.user.voted_for_all:
             return redirect('voting:already_voted')
         candidates = Candidate.objects.filter(position__name=PositionName.CSG.value).order_by('ballot_number')  # noqa
+        # flag for yes or no vote
+        if candidates.count() == 1:
+            acclamation = True
+        else:
+            acclamation = False
         context = {
             'position': PositionName.CSG.value,
             'candidates': candidates,
+            'acclamation': acclamation,
         }
         return render(request, self.template, context)
 
@@ -502,6 +742,18 @@ class VoteCSGView(View):
         if request.user.voted_for_csg:
             messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
             return redirect('voting:vote_ppb')
+        # acclamation vote
+        acclamation = True if request.POST.get('acclamation') is not None else False  # noqa
+        if acclamation:
+            candidate_id = request.POST.get('candidate_id')
+            candidate = Candidate.objects.filter(position__name=PositionName.CSG.value, id=candidate_id).first()  # noqa
+            if candidate:
+                candidate.no_votes_count += 1
+                candidate.save()
+                request.user.voted_for_csg = True
+                request.user.save()
+                return redirect('voting:vote_ppb')
+        # no acclamation
         candidate_id = request.POST.get('candidate_id')
         candidate = Candidate.objects.filter(position__name=PositionName.CSG.value, id=candidate_id).first()  # noqa
         # vote
@@ -522,9 +774,15 @@ class VotePPBView(View):
         if request.user.voted_for_all:
             return redirect('voting:already_voted')
         candidates = Candidate.objects.filter(position__name=PositionName.PPB.value).order_by('ballot_number')  # noqa
+        # flag for yes or no vote
+        if candidates.count() == 1:
+            acclamation = True
+        else:
+            acclamation = False
         context = {
             'position': PositionName.PPB.value,
             'candidates': candidates,
+            'acclamation': acclamation,
         }
         return render(request, self.template, context)
 
@@ -537,6 +795,18 @@ class VotePPBView(View):
         if request.user.voted_for_ppb:
             messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
             return redirect('voting:vote_ppg')
+        # acclamation vote
+        acclamation = True if request.POST.get('acclamation') is not None else False  # noqa
+        if acclamation:
+            candidate_id = request.POST.get('candidate_id')
+            candidate = Candidate.objects.filter(position__name=PositionName.PPB.value, id=candidate_id).first()  # noqa
+            if candidate:
+                candidate.no_votes_count += 1
+                candidate.save()
+                request.user.voted_for_ppb = True
+                request.user.save()
+                return redirect('voting:vote_ppg')
+        # no acclamation
         candidate_id = request.POST.get('candidate_id')
         candidate = Candidate.objects.filter(position__name=PositionName.PPB.value, id=candidate_id).first()  # noqa
         # vote
@@ -557,9 +827,15 @@ class VotePPGView(View):
         if request.user.voted_for_all:
             return redirect('voting:already_voted')
         candidates = Candidate.objects.filter(position__name=PositionName.PPG.value).order_by('ballot_number')  # noqa
+        # flag for yes or no vote
+        if candidates.count() == 1:
+            acclamation = True
+        else:
+            acclamation = False
         context = {
             'position': PositionName.PPG.value,
             'candidates': candidates,
+            'acclamation': acclamation,
         }
         return render(request, self.template, context)
 
@@ -572,6 +848,20 @@ class VotePPGView(View):
         if request.user.voted_for_ppg:
             messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
             return redirect('voting:vote_hspb')
+        # acclamation vote
+        acclamation = True if request.POST.get(
+            'acclamation') is not None else False
+        if acclamation:
+            candidate_id = request.POST.get('candidate_id')
+            candidate = Candidate.objects.filter(
+                position__name=PositionName.PPG.value, id=candidate_id).first()
+            if candidate:
+                candidate.no_votes_count += 1
+                candidate.save()
+                request.user.voted_for_ppg = True
+                request.user.save()
+                return redirect('voting:vote_hspb')
+        # no acclamation
         candidate_id = request.POST.get('candidate_id')
         candidate = Candidate.objects.filter(position__name=PositionName.PPG.value, id=candidate_id).first()  # noqa
         # vote
@@ -592,9 +882,15 @@ class VoteHSPBView(View):
         if request.user.voted_for_all:
             return redirect('voting:already_voted')
         candidates = Candidate.objects.filter(position__name=PositionName.HSPB.value).order_by('ballot_number')  # noqa
+        # flag for yes or no vote
+        if candidates.count() == 1:
+            acclamation = True
+        else:
+            acclamation = False
         context = {
             'position': PositionName.HSPB.value,
             'candidates': candidates,
+            'acclamation': acclamation,
         }
         return render(request, self.template, context)
 
@@ -607,6 +903,20 @@ class VoteHSPBView(View):
         if request.user.voted_for_hspb:
             messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
             return redirect('voting:vote_hspg')
+        # acclamation vote
+        acclamation = True if request.POST.get(
+            'acclamation') is not None else False
+        if acclamation:
+            candidate_id = request.POST.get('candidate_id')
+            candidate = Candidate.objects.filter(
+                position__name=PositionName.HSPB.value, id=candidate_id).first()
+            if candidate:
+                candidate.no_votes_count += 1
+                candidate.save()
+                request.user.voted_for_hspb = True
+                request.user.save()
+                return redirect('voting:vote_hspg')
+        # no acclamation
         candidate_id = request.POST.get('candidate_id')
         candidate = Candidate.objects.filter(position__name=PositionName.HSPB.value, id=candidate_id).first()  # noqa
         # vote
@@ -627,9 +937,15 @@ class VoteHSPGView(View):
         if request.user.voted_for_all:
             return redirect('voting:already_voted')
         candidates = Candidate.objects.filter(position__name=PositionName.HSPG.value).order_by('ballot_number')  # noqa
+        # flag for yes or no vote
+        if candidates.count() == 1:
+            acclamation = True
+        else:
+            acclamation = False
         context = {
             'position': PositionName.HSPG.value,
             'candidates': candidates,
+            'acclamation': acclamation,
         }
         return render(request, self.template, context)
 
@@ -642,6 +958,19 @@ class VoteHSPGView(View):
         if request.user.voted_for_hspg:
             messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
             return redirect('voting:vote_hpb')
+        # acclamation vote
+        acclamation = True if request.POST.get('acclamation') is not None else False  # noqa
+        if acclamation:
+            candidate_id = request.POST.get('candidate_id')
+            candidate = Candidate.objects.filter(position__name=PositionName.HSPG.value, id=candidate_id).first()  # noqa
+            if candidate:
+                candidate.no_votes_count += 1
+                candidate.save()
+                request.user.voted_for_hspg = True
+                request.user.save()
+                return redirect('voting:vote_hpb')
+        # no acclamation
+
         candidate_id = request.POST.get('candidate_id')
         candidate = Candidate.objects.filter(position__name=PositionName.HSPG.value, id=candidate_id).first()  # noqa
         # vote
@@ -662,9 +991,15 @@ class VoteHPBView(View):
         if request.user.voted_for_all:
             return redirect('voting:already_voted')
         candidates = Candidate.objects.filter(position__name=PositionName.HPB.value, house=request.user.house, sex=Sex.M.value).order_by('ballot_number')  # noqa
+        # flag for yes or no vote
+        if candidates.count() == 1:
+            acclamation = True
+        else:
+            acclamation = False
         context = {
             'position': PositionName.HPB.value,
             'candidates': candidates,
+            'acclamation': acclamation,
         }
         return render(request, self.template, context)
 
@@ -677,6 +1012,18 @@ class VoteHPBView(View):
         if request.user.voted_for_hpb:
             messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
             return redirect('voting:vote_hpg')
+        # acclamation vote
+        acclamation = True if request.POST.get('acclamation') is not None else False  # noqa
+        if acclamation:
+            candidate_id = request.POST.get('candidate_id')
+            candidate = Candidate.objects.filter(position__name=PositionName.HPB.value, id=candidate_id).first()  # noqa
+            if candidate:
+                candidate.no_votes_count += 1
+                candidate.save()
+                request.user.voted_for_hpb = True
+                request.user.save()
+                return redirect('voting:vote_hpg')
+        # no acclamation
         candidate_id = request.POST.get('candidate_id')
         candidate = Candidate.objects.filter(
             position__name=PositionName.HPB.value, house=request.user.house, sex=Sex.M.value, id=candidate_id).first()
@@ -698,9 +1045,15 @@ class VoteHPGView(View):
         if request.user.voted_for_all:
             return redirect('voting:already_voted')
         candidates = Candidate.objects.filter(position__name=PositionName.HPG.value, house=request.user.house, sex=Sex.F.value).order_by('ballot_number')  # noqa
+        # flag for yes or no vote
+        if candidates.count() == 1:
+            acclamation = True
+        else:
+            acclamation = False
         context = {
             'position': PositionName.HPG.value,
             'candidates': candidates,
+            'acclamation': acclamation,
         }
         return render(request, self.template, context)
 
@@ -713,6 +1066,19 @@ class VoteHPGView(View):
         if request.user.voted_for_hpg:
             messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
             return redirect('voting:vote_completed')
+        # acclamation vote
+        acclamation = True if request.POST.get('acclamation') is not None else False  # noqa
+        if acclamation:
+            candidate_id = request.POST.get('candidate_id')
+            candidate = Candidate.objects.filter(position__name=PositionName.HPG.value, id=candidate_id).first()  # noqa
+            if candidate:
+                candidate.no_votes_count += 1
+                candidate.save()
+                request.user.voted_for_hpg = True
+                vote_for_all(request)
+                request.user.save()
+                return redirect('voting:vote_completed')
+        # no acclamation
         candidate_id = request.POST.get('candidate_id')
         candidate = Candidate.objects.filter(
             position__name=PositionName.HPG.value, house=request.user.house, sex=Sex.F.value, id=candidate_id).first()
@@ -742,3 +1108,20 @@ class AlreadyVotedView(View):
     @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
         return render(request, self.template, {})
+
+
+class NoVoteView(View):
+    @method_decorator(MustLogin)
+    def get(self, request, *args, **kwargs):
+        candidate_id = request.GET.get('candidate_id')
+        position_id = request.GET.get('position_id')
+        candidate = Candidate.objects.filter(
+            id=candidate_id, position__id=position_id).first()
+        position = Position.objects.filter(id=position_id).first()
+        if candidate:
+            candidate.no_votes_count += 1
+            candidate.save()
+            messages.success(
+                request, 'Vote Successful, Proceed to next portfolio.')
+            if position.name == PositionName.SP.value:
+                request.user.voted_for_sp = True
