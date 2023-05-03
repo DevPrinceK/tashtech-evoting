@@ -1,5 +1,6 @@
 import time
+from xml.dom.minidom import Document
+from random import randint
 
-key4 = str(int(100000 * time.time()))[::-1][0:5]
 
-print(key4)
+print(randint(1368896, 9999999999))
