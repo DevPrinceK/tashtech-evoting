@@ -52,7 +52,7 @@ class Candidate(models.Model):
 
 class Position(models.Model):
     '''Model to create and manage positions'''
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
     precedence = models.IntegerField(default=1)
     created_at = models.DateTimeField(auto_now_add=True)
 

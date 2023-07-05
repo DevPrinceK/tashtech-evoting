@@ -1,3 +1,6 @@
+from django.db import IntegrityError
+import csv
+import io
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
@@ -48,6 +51,40 @@ class CreateUpdatePositionView(View):
                 break
             messages.warning(request, message)
             return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
+
+
+class UploadPositionsFromCSV(View):
+    @method_decorator(AdminOnly)
+    def get(self, request, *args, **kwargs):
+        return redirect('backend:positions')
+
+    @method_decorator(AdminOnly)
+    def post(self, request, *args, **kwargs):
+        new_positions = 0
+        csv_file = request.FILES.get('csv_file')
+        dataset = csv_file.read().decode('UTF-8')
+        io_string = io.StringIO(dataset)
+        next(io_string)
+        for column in csv.reader(io_string, delimiter=',', quotechar="|"):
+            # create position
+            try:
+                _ = Position.objects.create(
+                    name=column[0],
+                    precedence=column[1],
+                )
+            except IntegrityError:
+                '''Skip duplicate IDs'''
+                print('Voter with index number {} already exists'.format(column[0]))  # noqa
+            else:
+                # update user with other relevant data after creating
+                if _:
+                    print('Position with name {} created'.format(column[0]))  # noqa
+                new_positions += 1
+        if new_positions > 0:
+            messages.success(request, '{} Positions Uploaded Successfully'.format(new_positions))  # noqa
+        else:
+            messages.error(request, 'No Positions Uploaded! Positions already exist')  # noqa
+        return redirect('backend:positions')
 
 
 class DeletePositionView(View):

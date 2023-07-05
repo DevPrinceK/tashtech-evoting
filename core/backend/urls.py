@@ -25,6 +25,7 @@ urlpatterns += [
 urlpatterns += [
     path('positions/', views.PositionsView.as_view(), name='positions'),
     path('create-update_position/', views.CreateUpdatePositionView.as_view(), name='create_update_position'),  # noqa
+    path('upload-position-csv/', views.UploadPositionsFromCSV.as_view(), name='upload_position_csv'),  # noqa
     path('delete-position/', views.DeletePositionView.as_view(), name='delete_position'),  # noqa
 ]
 

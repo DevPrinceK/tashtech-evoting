@@ -33,6 +33,7 @@
                                 <th>Name</th>
                                 <th>Candidates</th>
                                 <th>Votes Cast</th>
+                                <th>Precedence</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -44,6 +45,7 @@
                                 <td>{{position.name|upper}}</td>
                                 <td>{{position.get_candidates}}</td>
                                 <td>{{position.get_votes_cast}}</td>
+                                <td>{{position.precedence}}</td>
                                 <td class="text text-center d-flex">
                                     <a href="{% url 'backend:create_update_position' %}?position_id={{position.id}}"
                                         class="px-2">

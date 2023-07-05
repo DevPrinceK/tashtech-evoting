@@ -1,12 +1,9 @@
 import csv
 import io
-# from sqlite3 import IntegrityError
 import time
 from django.contrib import messages
-from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.utils.decorators import method_decorator
-from django.utils.html import strip_tags
 from django.views.generic import View
 from django.db import IntegrityError
 
@@ -46,6 +43,7 @@ class CreateUpdateVoterView(View):
             voter.index_number = request.POST.get('index_number')
             voter.fullname = request.POST.get('fullname')
             voter.user_class = request.POST.get('user_class')
+            voter.status = request.POST.get('status')
             voter.save()
             messages.success(request, 'Voter Details Updated Successfully')
             return redirect('backend:voters')
@@ -61,6 +59,7 @@ class CreateUpdateVoterView(View):
             voter.external_key = external_key
             voter.sex = request.POST.get('sex')
             voter.house = request.POST.get('house')
+            voter.status = request.POST.get('status')
             voter.save()
             messages.success(request, 'Voter Created Successfully')
             return redirect('backend:voters')
@@ -83,7 +82,7 @@ class UploadVotersFromCSV(View):
             # create user with custom user manager
             try:
                 _ = User.objects.create_user(
-                    index_number=column[0],
+                    index_number=column[4],
                     password=external_key,
                 )
             except IntegrityError:
@@ -92,15 +91,16 @@ class UploadVotersFromCSV(View):
             else:
                 # update user with other relevant data after creating
                 if _:
-                    _.fullname = column[1]
-                    _.sex = column[2]
-                    _.user_class = column[3]
-                    _.house = column[4]
+                    _.fullname = column[0]
+                    _.sex = column[1]
+                    _.user_class = column[2]
+                    _.house = column[3]
+                    _.status = column[5]
                     _.external_key = external_key
                     _.save()
                 new_voters += 1
         if new_voters > 0:
-            messages.success(request, '{} Voters uploaded Successfully'.format(new_voters))  # noqa
+            messages.success(request, '{} Voters Uploaded Successfully'.format(new_voters))  # noqa
         else:
             messages.error(request, 'No Voters Uploaded! Voters already exist')  # noqa
         return redirect('backend:voters')
