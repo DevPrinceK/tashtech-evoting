@@ -33,6 +33,7 @@
                                 <th>Index Number</th>
                                 <th>Name</th>
                                 <th>Class</th>
+                                <th>Status</th>
                                 <th>Voted</th>
                                 <th>Action</th>
                             </tr>
@@ -45,6 +46,7 @@
                                 <td>{{voter.index_number}}</td>
                                 <td>{{voter.fullname|upper}}</td>
                                 <td>{{voter.user_class|upper}}</td>
+                                <td>{{voter.status|upper}}</td>
                                 <td>{{voter.voted_for_all}}</td>
                                 <td class="text text-center d-flex">
                                     <a href="{% url 'backend:create_update_voter' %}?index_number={{voter.index_number}}"

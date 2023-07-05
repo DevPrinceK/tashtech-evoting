@@ -53,12 +53,6 @@ urlpatterns += [
     path('vote-csg/', views.VoteCSGView.as_view(), name='vote_csg'),
 ]
 
-# preps prefects
-urlpatterns += [
-    path('vote-ppb/', views.VotePPBView.as_view(), name='vote_ppb'),
-    path('vote-ppg/', views.VotePPGView.as_view(), name='vote_ppg'),
-]
-
 # health and sanitation prefects
 urlpatterns += [
     path('vote-hspb/', views.VoteHSPBView.as_view(), name='vote_hspb'),
@@ -69,4 +63,10 @@ urlpatterns += [
 urlpatterns += [
     path('vote-hpb/', views.VoteHPBView.as_view(), name='vote_hpb'),
     path('vote-hpg/', views.VoteHPGView.as_view(), name='vote_hpg'),
+]
+
+# day students coordinator
+urlpatterns += [
+    path('vote-dscb/', views.VoteDSCBView.as_view(), name='vote_dscb'),
+    path('vote-dscg/', views.VoteDSCGView.as_view(), name='vote_dscg'),
 ]

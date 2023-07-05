@@ -10,12 +10,16 @@ class User(AbstractBaseUser, PermissionsMixin):
     user_class = models.CharField(max_length=20, null=True, blank=True)
     house = models.CharField(max_length=20, null=True, blank=True)
     sex = models.CharField(max_length=10, blank=True, null=True)
+    status = models.CharField(max_length=20, blank=True, null=True)
     # voted for senior prefects
     voted_for_sp = models.BooleanField(default=False)
     voted_for_gp = models.BooleanField(default=False)
     # voted for compound overseers
     voted_for_cob = models.BooleanField(default=False)
     voted_for_cog = models.BooleanField(default=False)
+    # voted for utility and furniture
+    voted_for_uafb = models.BooleanField(default=False)
+    voted_for_uafg = models.BooleanField(default=False)
     # voted for spaorts & games prefects
     voted_for_sgpb = models.BooleanField(default=False)
     voted_for_sgpg = models.BooleanField(default=False)
@@ -25,21 +29,21 @@ class User(AbstractBaseUser, PermissionsMixin):
     # voted for entertainment prefects
     voted_for_ecpb = models.BooleanField(default=False)
     voted_for_ecpg = models.BooleanField(default=False)
-    # voted for library prefects
+    # voted for library and prep prefects
     voted_for_lpb = models.BooleanField(default=False)
     voted_for_lpg = models.BooleanField(default=False)
     # voted for chapel stewards
     voted_for_csb = models.BooleanField(default=False)
     voted_for_csg = models.BooleanField(default=False)
-    # voted for preps prefects
-    voted_for_ppb = models.BooleanField(default=False)
-    voted_for_ppg = models.BooleanField(default=False)
     # voted for health sanitations prefects
     voted_for_hspb = models.BooleanField(default=False)
     voted_for_hspg = models.BooleanField(default=False)
     # voted fir house prefects
     voted_for_hpb = models.BooleanField(default=False)
     voted_for_hpg = models.BooleanField(default=False)
+    # voted for day students coordinator
+    voted_for_day_std_coordinator = models.BooleanField(default=False)
+    voted_for_day_std_coordinator_g = models.BooleanField(default=False)
     # voted for all positions
     voted_for_all = models.BooleanField(default=False)
 

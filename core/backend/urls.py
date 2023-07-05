@@ -5,7 +5,13 @@ from . import views
 
 app_name = 'backend'
 urlpatterns = [
-    path('', views.IndexView.as_view(), name='index'),
+    # path('', views.IndexView.as_view(), name='index'),
+    path('', views.NewDashboardView.as_view(), name='index'),
+]
+
+# new dashboard
+urlpatterns += [
+    path('new-dashboard/', views.NewDashboardView.as_view(), name="new_dashboard"),
 ]
 
 # Candidates

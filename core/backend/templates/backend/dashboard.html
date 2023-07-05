@@ -1,0 +1,87 @@
+{% extends 'backend/base.html' %}
+{% load humanize %}
+
+{% block active_item %}dashboard{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="breadcrumb">
+    <a href="{% url 'backend:index' %}">Dashboard</a>
+    <a class="active"><i class="bi bi-chevron-right"></i>Dashboard</a>
+</div>
+
+<div class="p-3 row-col-12">
+    <h4 class="page-header"><i class="bi bi-sliders me-2"></i> Dashboard</h4>
+    <p>Breakdown of the current election.</p>
+
+    <section class="section">
+        <div class="row">
+            <div class="col-lg-12">
+                <a href="{% url 'backend:download_results_csv' %}" class="btn btn-sm btn-primary text-white"> <i
+                        class="bi bi-save"></i> Download Results</a>
+                <div class="card mb-2 mt-1">
+                    <div class="card-body my-auto py-auto">
+                        <div class="row">
+                            <div class="col-6"><span class="p mt-1 text-left badge bg-primary"> Current Election </span>
+                            </div>
+                            <div class="col-6 text-end">
+                                <span class="p mt-1 text-right badge bg-primary">{{current_election}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Votes Received</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{total_votes_cast}}</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            {% if candidates %}
+            {% for candidate in candidates %}
+            <div class="col-lg-3 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <b>Position</b>
+                        <P class="card-text">{{candidate.position.name}}</P> <br>
+                        <b>Candidate</b>
+                        <p class="card-text">{{candidate.name}}</p> <br>
+                        <b>Votes Count (YES) </b>
+                        <p class="card-text">{{candidate.vote_count}} ({{candidate.get_vote_percentage}}%)</p> <br>
+                        <b>Votes Count (NO) </b>
+                        <p class="card-text">{{candidate.no_votes_count}} ({{candidate.get_no_vote_percentage}}%) </p>
+                        <br>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <center>
+                            <b>NO CANDIDATE RESULTS FOUND</b>
+                        </center>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+
+
+
+</div>
+{% endblock %}

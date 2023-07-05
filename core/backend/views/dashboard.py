@@ -31,14 +31,14 @@ class IndexView(View):
         ecpb = Candidate.objects.filter(position__name=PositionName.ECPB.value).order_by('ballot_number')  # noqa
         ecpg = Candidate.objects.filter(position__name=PositionName.ECPG.value).order_by('ballot_number')  # noqa
 
-        lpb = Candidate.objects.filter(position__name=PositionName.LPB.value).order_by('ballot_number').first()  # noqa
-        lpg = Candidate.objects.filter(position__name=PositionName.LPG.value).order_by('ballot_number').first()  # noqa
+        plpb = Candidate.objects.filter(position__name=PositionName.PLPB.value).order_by('ballot_number').first()  # noqa
+        plpg = Candidate.objects.filter(position__name=PositionName.PLPG.value).order_by('ballot_number').first()  # noqa
 
         csb = Candidate.objects.filter(position__name=PositionName.CSB.value).order_by('ballot_number').first()  # noqa
         csg = Candidate.objects.filter(position__name=PositionName.CSG.value).order_by('ballot_number').first()  # noqa
 
-        ppb = Candidate.objects.filter(position__name=PositionName.PPB.value).order_by('ballot_number')  # noqa
-        ppg = Candidate.objects.filter(position__name=PositionName.PPG.value).order_by('ballot_number')  # noqa
+        # ppb = Candidate.objects.filter(position__name=PositionName.PPB.value).order_by('ballot_number')  # noqa
+        # ppg = Candidate.objects.filter(position__name=PositionName.PPG.value).order_by('ballot_number')  # noqa
 
         hspb = Candidate.objects.filter(position__name=PositionName.HSPB.value).order_by('ballot_number')  # noqa
         hspg = Candidate.objects.filter(position__name=PositionName.HSPG.value).order_by('ballot_number').first()  # noqa
@@ -69,12 +69,12 @@ class IndexView(View):
             'dhpg': dhpg,
             'ecpb': ecpb,
             'ecpg': ecpg,
-            'lpb': lpb,
-            'lpg': lpg,
+            'lpb': plpb,
+            'lpg': plpg,
             'csb': csb,
             'csg': csg,
-            'ppb': ppb,
-            'ppg': ppg,
+            # 'ppb': ppb,
+            # 'ppg': ppg,
             'hspb': hspb,
             'hspg': hspg,
             'hpba': hpba,

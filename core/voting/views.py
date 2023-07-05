@@ -55,7 +55,8 @@ class VoteSPView(View):
             return redirect('voting:vote_gp')
         # acclamation vote
         acclamation = True if request.POST.get('acclamation') is not None else False  # noqa
-        if acclamation:
+        no_vote = request.POST.get('no_vote') or None
+        if acclamation and no_vote == "NO":
             candidate_id = request.POST.get('candidate_id')
             candidate = Candidate.objects.filter(position__name=PositionName.SP.value, id=candidate_id).first()  # noqa
             if candidate:
@@ -108,7 +109,8 @@ class VoteGPView(View):
             return redirect('voting:vote_cob')
         # acclamation vote
         acclamation = True if request.POST.get('acclamation') is not None else False  # noqa
-        if acclamation:
+        no_vote = request.POST.get('no_vote') or None
+        if acclamation and no_vote == "NO":
             candidate_id = request.POST.get('candidate_id')
             candidate = Candidate.objects.filter(position__name=PositionName.GP.value, id=candidate_id).first()  # noqa
             if candidate:
@@ -161,7 +163,8 @@ class VoteCOBView(View):
             return redirect('voting:vote_cog')
         # acclamation vote
         acclamation = True if request.POST.get('acclamation') is not None else False  # noqa
-        if acclamation:
+        no_vote = request.POST.get('no_vote') or None
+        if acclamation and no_vote == "NO":
             candidate_id = request.POST.get('candidate_id')
             candidate = Candidate.objects.filter(position__name=PositionName.COB.value, id=candidate_id).first()  # noqa
             if candidate:
@@ -213,8 +216,10 @@ class VoteCOGView(View):
             messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
             return redirect('voting:vote_sgpb')
         # acclamation vote
-        acclamation = True if request.POST.get('acclamation') is not None else False  # noqa
-        if acclamation:
+        acclamation = True if request.POST.get(
+            'acclamation') is not None else False  #
+        no_vote = request.POST.get('no_vote') or None
+        if acclamation and no_vote == "NO":
             candidate_id = request.POST.get('candidate_id')
             candidate = Candidate.objects.filter(position__name=PositionName.COG.value, id=candidate_id).first()  # noqa
             if candidate:
@@ -267,7 +272,8 @@ class VoteSGPBView(View):
             return redirect('voting:vote_sgpg')
         # acclamation vote
         acclamation = True if request.POST.get('acclamation') is not None else False  # noqa
-        if acclamation:
+        no_vote = request.POST.get('no_vote') or None
+        if acclamation and no_vote == "NO":
             candidate_id = request.POST.get('candidate_id')
             candidate = Candidate.objects.filter(position__name=PositionName.SGPB.value, id=candidate_id).first()  # noqa
             if candidate:
@@ -320,7 +326,8 @@ class VoteSGPGView(View):
             return redirect('voting:vote_dhpb')
         # acclamation vote
         acclamation = True if request.POST.get('acclamation') is not None else False  # noqa
-        if acclamation:
+        no_vote = request.POST.get('no_vote') or None
+        if acclamation and no_vote == "NO":
             candidate_id = request.POST.get('candidate_id')
             candidate = Candidate.objects.filter(position__name=PositionName.SGPG.value, id=candidate_id).first()  # noqa
             if candidate:
@@ -373,7 +380,8 @@ class VoteDHPBView(View):
             return redirect('voting:vote_dhpg')
         # acclamation vote
         acclamation = True if request.POST.get('acclamation') is not None else False  # noqa
-        if acclamation:
+        no_vote = request.POST.get('no_vote') or None
+        if acclamation and no_vote == "NO":
             candidate_id = request.POST.get('candidate_id')
             candidate = Candidate.objects.filter(position__name=PositionName.DHPB.value, id=candidate_id).first()  # noqa
             if candidate:
@@ -426,7 +434,8 @@ class VoteDHPGView(View):
             return redirect('voting:vote_ecpb')
         # acclamation vote
         acclamation = True if request.POST.get('acclamation') is not None else False  # noqa
-        if acclamation:
+        no_vote = request.POST.get('no_vote') or None
+        if acclamation and no_vote == "NO":
             candidate_id = request.POST.get('candidate_id')
             candidate = Candidate.objects.filter(position__name=PositionName.DHPG.value, id=candidate_id).first()  # noqa
             if candidate:
@@ -479,7 +488,8 @@ class VoteECPBView(View):
             return redirect('voting:vote_ecpg')
         # acclamation vote
         acclamation = True if request.POST.get('acclamation') is not None else False  # noqa
-        if acclamation:
+        no_vote = request.POST.get('no_vote') or None
+        if acclamation and no_vote == "NO":
             candidate_id = request.POST.get('candidate_id')
             candidate = Candidate.objects.filter(position__name=PositionName.ECPB.value, id=candidate_id).first()  # noqa
             if candidate:
@@ -532,7 +542,8 @@ class VoteECPGView(View):
             return redirect('voting:vote_lpb')
         # acclamation vote
         acclamation = True if request.POST.get('acclamation') is not None else False  # noqa
-        if acclamation:
+        no_vote = request.POST.get('no_vote') or None
+        if acclamation and no_vote == "NO":
             candidate_id = request.POST.get('candidate_id')
             candidate = Candidate.objects.filter(position__name=PositionName.ECPG.value, id=candidate_id).first()  # noqa
             if candidate:
@@ -554,21 +565,21 @@ class VoteECPGView(View):
 
 
 class VoteLPBView(View):
-    '''Implements voting for LIBRARY PREFECT - BOYS'''
+    '''Implements voting for PREP and LIBRARY PREFECT - BOYS'''
     template = 'voting/vote.html'
 
     @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
         if request.user.voted_for_all:
             return redirect('voting:already_voted')
-        candidates = Candidate.objects.filter(position__name=PositionName.LPB.value).order_by('ballot_number')  # noqa
+        candidates = Candidate.objects.filter(position__name=PositionName.PLPB.value).order_by('ballot_number')  # noqa
         # flag for yes or no vote
         if candidates.count() == 1:
             acclamation = True
         else:
             acclamation = False
         context = {
-            'position': PositionName.LPB.value,
+            'position': PositionName.PLPB.value,
             'candidates': candidates,
             'acclamation': acclamation,
         }
@@ -585,9 +596,10 @@ class VoteLPBView(View):
             return redirect('voting:vote_lpg')
         # acclamation vote
         acclamation = True if request.POST.get('acclamation') is not None else False  # noqa
-        if acclamation:
+        no_vote = request.POST.get('no_vote') or None
+        if acclamation and no_vote == "NO":
             candidate_id = request.POST.get('candidate_id')
-            candidate = Candidate.objects.filter(position__name=PositionName.LPB.value, id=candidate_id).first()  # noqa
+            candidate = Candidate.objects.filter(position__name=PositionName.PLPB.value, id=candidate_id).first()  # noqa
             if candidate:
                 candidate.no_votes_count += 1
                 candidate.save()
@@ -596,7 +608,7 @@ class VoteLPBView(View):
                 return redirect('voting:vote_lpg')
         # no acclamation
         candidate_id = request.POST.get('candidate_id')
-        candidate = Candidate.objects.filter(position__name=PositionName.LPB.value, id=candidate_id).first()  # noqa
+        candidate = Candidate.objects.filter(position__name=PositionName.PLPB.value, id=candidate_id).first()  # noqa
         # vote
         candidate.vote_count += 1
         candidate.save()
@@ -607,21 +619,21 @@ class VoteLPBView(View):
 
 
 class VoteLPGView(View):
-    '''Implements voting for LIBRARY PREFECT - GIRLS'''
+    '''Implements voting for LIBRARY and PREP PREFECT - GIRLS'''
     template = 'voting/vote.html'
 
     @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
         if request.user.voted_for_all:
             return redirect('voting:already_voted')
-        candidates = Candidate.objects.filter(position__name=PositionName.LPG.value).order_by('ballot_number')  # noqa
+        candidates = Candidate.objects.filter(position__name=PositionName.PLPG.value).order_by('ballot_number')  # noqa
         # flag for yes or no vote
         if candidates.count() == 1:
             acclamation = True
         else:
             acclamation = False
         context = {
-            'position': PositionName.LPG.value,
+            'position': PositionName.PLPG.value,
             'candidates': candidates,
             'acclamation': acclamation,
         }
@@ -638,9 +650,10 @@ class VoteLPGView(View):
             return redirect('voting:vote_csb')
         # acclamation vote
         acclamation = True if request.POST.get('acclamation') is not None else False  # noqa
-        if acclamation:
+        no_vote = request.POST.get('no_vote') or None
+        if acclamation and no_vote == "NO":
             candidate_id = request.POST.get('candidate_id')
-            candidate = Candidate.objects.filter(position__name=PositionName.LPG.value, id=candidate_id).first()  # noqa
+            candidate = Candidate.objects.filter(position__name=PositionName.PLPG.value, id=candidate_id).first()  # noqa
             if candidate:
                 candidate.no_votes_count += 1
                 candidate.save()
@@ -649,7 +662,7 @@ class VoteLPGView(View):
                 return redirect('voting:vote_csb')
         # no acclamation
         candidate_id = request.POST.get('candidate_id')
-        candidate = Candidate.objects.filter(position__name=PositionName.LPG.value, id=candidate_id).first()  # noqa
+        candidate = Candidate.objects.filter(position__name=PositionName.PLPG.value, id=candidate_id).first()  # noqa
         # vote
         candidate.vote_count += 1
         candidate.save()
@@ -691,7 +704,8 @@ class VoteCSBView(View):
             return redirect('voting:vote_csg')
         # acclamation vote
         acclamation = True if request.POST.get('acclamation') is not None else False  # noqa
-        if acclamation:
+        no_vote = request.POST.get('no_vote') or None
+        if acclamation and no_vote == "NO":
             candidate_id = request.POST.get('candidate_id')
             candidate = Candidate.objects.filter(position__name=PositionName.CSB.value, id=candidate_id).first()  # noqa
             if candidate:
@@ -744,7 +758,8 @@ class VoteCSGView(View):
             return redirect('voting:vote_ppb')
         # acclamation vote
         acclamation = True if request.POST.get('acclamation') is not None else False  # noqa
-        if acclamation:
+        no_vote = request.POST.get('no_vote') or None
+        if acclamation and no_vote == "NO":
             candidate_id = request.POST.get('candidate_id')
             candidate = Candidate.objects.filter(position__name=PositionName.CSG.value, id=candidate_id).first()  # noqa
             if candidate:
@@ -762,119 +777,11 @@ class VoteCSGView(View):
         request.user.voted_for_csg = True
         request.user.save()
         messages.success(request, 'Vote Successful, Proceed to next portfolio.')  # noqa
-        return redirect('voting:vote_ppb')
-
-
-class VotePPBView(View):
-    '''Implements voting for PREPS PREFECT - BOYS'''
-    template = 'voting/vote.html'
-
-    @method_decorator(MustLogin)
-    def get(self, request, *args, **kwargs):
-        if request.user.voted_for_all:
-            return redirect('voting:already_voted')
-        candidates = Candidate.objects.filter(position__name=PositionName.PPB.value).order_by('ballot_number')  # noqa
-        # flag for yes or no vote
-        if candidates.count() == 1:
-            acclamation = True
-        else:
-            acclamation = False
-        context = {
-            'position': PositionName.PPB.value,
-            'candidates': candidates,
-            'acclamation': acclamation,
-        }
-        return render(request, self.template, context)
-
-    @method_decorator(MustLogin)
-    def post(self, request, *args, **kwargs):
-        if request.user.voted_for_all:
-            # check if voter has already voted
-            return redirect('voting:already_voted')
-        # already voted for this portfolio
-        if request.user.voted_for_ppb:
-            messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
-            return redirect('voting:vote_ppg')
-        # acclamation vote
-        acclamation = True if request.POST.get('acclamation') is not None else False  # noqa
-        if acclamation:
-            candidate_id = request.POST.get('candidate_id')
-            candidate = Candidate.objects.filter(position__name=PositionName.PPB.value, id=candidate_id).first()  # noqa
-            if candidate:
-                candidate.no_votes_count += 1
-                candidate.save()
-                request.user.voted_for_ppb = True
-                request.user.save()
-                return redirect('voting:vote_ppg')
-        # no acclamation
-        candidate_id = request.POST.get('candidate_id')
-        candidate = Candidate.objects.filter(position__name=PositionName.PPB.value, id=candidate_id).first()  # noqa
-        # vote
-        candidate.vote_count += 1
-        candidate.save()
-        request.user.voted_for_ppb = True
-        request.user.save()
-        messages.success(request, 'Vote Successful, Proceed to next portfolio.')  # noqa
-        return redirect('voting:vote_ppg')
-
-
-class VotePPGView(View):
-    '''Implements voting for PREPS PREFECT - GIRLS'''
-    template = 'voting/vote.html'
-
-    @method_decorator(MustLogin)
-    def get(self, request, *args, **kwargs):
-        if request.user.voted_for_all:
-            return redirect('voting:already_voted')
-        candidates = Candidate.objects.filter(position__name=PositionName.PPG.value).order_by('ballot_number')  # noqa
-        # flag for yes or no vote
-        if candidates.count() == 1:
-            acclamation = True
-        else:
-            acclamation = False
-        context = {
-            'position': PositionName.PPG.value,
-            'candidates': candidates,
-            'acclamation': acclamation,
-        }
-        return render(request, self.template, context)
-
-    @method_decorator(MustLogin)
-    def post(self, request, *args, **kwargs):
-        if request.user.voted_for_all:
-            # check if voter has already voted
-            return redirect('voting:already_voted')
-        # already voted for this portfolio
-        if request.user.voted_for_ppg:
-            messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
-            return redirect('voting:vote_hspb')
-        # acclamation vote
-        acclamation = True if request.POST.get(
-            'acclamation') is not None else False
-        if acclamation:
-            candidate_id = request.POST.get('candidate_id')
-            candidate = Candidate.objects.filter(
-                position__name=PositionName.PPG.value, id=candidate_id).first()
-            if candidate:
-                candidate.no_votes_count += 1
-                candidate.save()
-                request.user.voted_for_ppg = True
-                request.user.save()
-                return redirect('voting:vote_hspb')
-        # no acclamation
-        candidate_id = request.POST.get('candidate_id')
-        candidate = Candidate.objects.filter(position__name=PositionName.PPG.value, id=candidate_id).first()  # noqa
-        # vote
-        candidate.vote_count += 1
-        candidate.save()
-        request.user.voted_for_ppg = True
-        request.user.save()
-        messages.success(request, 'Vote Successful, Proceed to next portfolio.')  # noqa
         return redirect('voting:vote_hspb')
 
 
 class VoteHSPBView(View):
-    '''Implements voting for HEALTH AND SANITATION PREFECT - BOYS'''
+    '''Implements voting for HEALTH SANITATION and ATTIRE PREFECT - BOYS'''
     template = 'voting/vote.html'
 
     @method_decorator(MustLogin)
@@ -904,9 +811,9 @@ class VoteHSPBView(View):
             messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
             return redirect('voting:vote_hspg')
         # acclamation vote
-        acclamation = True if request.POST.get(
-            'acclamation') is not None else False
-        if acclamation:
+        acclamation = True if request.POST.get('acclamation') is not None else False  # noqa
+        no_vote = request.POST.get('no_vote') or None
+        if acclamation and no_vote == "NO":
             candidate_id = request.POST.get('candidate_id')
             candidate = Candidate.objects.filter(
                 position__name=PositionName.HSPB.value, id=candidate_id).first()
@@ -929,7 +836,7 @@ class VoteHSPBView(View):
 
 
 class VoteHSPGView(View):
-    '''Implements voting for HEALTH AND SANITATION PREFECT - GIRLS'''
+    '''Implements voting for HEALTH SANITATION and ATTIRE PREFECT - GIRLS'''
     template = 'voting/vote.html'
 
     @method_decorator(MustLogin)
@@ -960,7 +867,8 @@ class VoteHSPGView(View):
             return redirect('voting:vote_hpb')
         # acclamation vote
         acclamation = True if request.POST.get('acclamation') is not None else False  # noqa
-        if acclamation:
+        no_vote = request.POST.get('no_vote') or None
+        if acclamation and no_vote == "NO":
             candidate_id = request.POST.get('candidate_id')
             candidate = Candidate.objects.filter(position__name=PositionName.HSPG.value, id=candidate_id).first()  # noqa
             if candidate:
@@ -1014,7 +922,8 @@ class VoteHPBView(View):
             return redirect('voting:vote_hpg')
         # acclamation vote
         acclamation = True if request.POST.get('acclamation') is not None else False  # noqa
-        if acclamation:
+        no_vote = request.POST.get('no_vote') or None
+        if acclamation and no_vote == "NO":
             candidate_id = request.POST.get('candidate_id')
             candidate = Candidate.objects.filter(position__name=PositionName.HPB.value, id=candidate_id).first()  # noqa
             if candidate:
@@ -1068,7 +977,8 @@ class VoteHPGView(View):
             return redirect('voting:vote_completed')
         # acclamation vote
         acclamation = True if request.POST.get('acclamation') is not None else False  # noqa
-        if acclamation:
+        no_vote = request.POST.get('no_vote') or None
+        if acclamation and no_vote == "NO":
             candidate_id = request.POST.get('candidate_id')
             candidate = Candidate.objects.filter(position__name=PositionName.HPG.value, id=candidate_id).first()  # noqa
             if candidate:
@@ -1082,6 +992,128 @@ class VoteHPGView(View):
         candidate_id = request.POST.get('candidate_id')
         candidate = Candidate.objects.filter(
             position__name=PositionName.HPG.value, house=request.user.house, sex=Sex.F.value, id=candidate_id).first()
+        # vote
+        candidate.vote_count += 1
+        candidate.save()
+        request.user.voted_for_hpg = True
+        if request.user.status == "BOARDING":
+            vote_for_all(request)
+            request.user.save()
+            messages.success(request, 'Vote Successful, Proceed to next portfolio.')  # noqa
+            return redirect('voting:vote_completed')
+        else:
+            messages.success(request, 'Vote Successful, Proceed to next portfolio.')  # noqa
+            return redirect('voting:vote_dscb')
+
+
+class VoteDSCBView(View):
+    '''Implements voting for DAY STUDENTS COORDINATOR - BOY'''
+    template = 'voting/vote.html'
+
+    @method_decorator(MustLogin)
+    def get(self, request, *args, **kwargs):
+        if request.user.voted_for_all or request.user.status == "BOARDING":
+            return redirect('voting:already_voted')
+        candidates = Candidate.objects.filter(position__name=PositionName.DSCB.value, sex=Sex.M.value).order_by('ballot_number')  # noqa
+        # flag for yes or no vote
+        if candidates.count() == 1:
+            acclamation = True
+        else:
+            acclamation = False
+        context = {
+            'position': PositionName.DSCB.value,
+            'candidates': candidates,
+            'acclamation': acclamation,
+        }
+        return render(request, self.template, context)
+
+    @method_decorator(MustLogin)
+    def post(self, request, *args, **kwargs):
+        if request.user.voted_for_all:
+            # check if voter has already voted
+            return redirect('voting:already_voted')
+        # already voted for this portfolio
+        if request.user.voted_for_day_std_coordinator:
+            messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
+            return redirect('voting:vote_dscg')
+        # acclamation vote
+        acclamation = True if request.POST.get('acclamation') is not None else False  # noqa
+        no_vote = request.POST.get('no_vote') or None
+        if acclamation and no_vote == "NO":
+            candidate_id = request.POST.get('candidate_id')
+            candidate = Candidate.objects.filter(position__name=PositionName.DSCB.value, id=candidate_id).first()  # noqa
+            if candidate:
+                candidate.no_votes_count += 1
+                candidate.save()
+                request.user.voted_for_day_std_coordinator = True
+                vote_for_all(request)
+                request.user.save()
+                return redirect('voting:vote_completed')
+        # no acclamation
+        candidate_id = request.POST.get('candidate_id')
+        candidate = Candidate.objects.filter(
+            position__name=PositionName.DSCB.value, sex=Sex.M.value, id=candidate_id).first()
+        # vote
+        candidate.vote_count += 1
+        candidate.save()
+        request.user.voted_for_hpg = True
+        if request.user.status == "BOARDING":
+            vote_for_all(request)
+            request.user.save()
+            messages.success(request, 'Vote Successful, Proceed to next portfolio.')  # noqa
+            return redirect('voting:vote_completed')
+        else:
+            messages.success(request, 'Vote Successful, Proceed to next portfolio.')  # noqa
+            return redirect('voting:vote_dscg')
+
+
+class VoteDSCGView(View):
+    '''Implements voting for DAY STUDENTS COORDINATOR - GIRLS'''
+    template = 'voting/vote.html'
+
+    @method_decorator(MustLogin)
+    def get(self, request, *args, **kwargs):
+        if request.user.voted_for_all or request.user.status == "BOARDING":
+            return redirect('voting:already_voted')
+        candidates = Candidate.objects.filter(position__name=PositionName.DSCG.value, sex=Sex.F.value).order_by('ballot_number')  # noqa
+        # flag for yes or no vote
+        if candidates.count() == 1:
+            acclamation = True
+        else:
+            acclamation = False
+        context = {
+            'position': PositionName.DSCG.value,
+            'candidates': candidates,
+            'acclamation': acclamation,
+        }
+        return render(request, self.template, context)
+
+    @method_decorator(MustLogin)
+    def post(self, request, *args, **kwargs):
+        if request.user.voted_for_all:
+            # check if voter has already voted
+            return redirect('voting:already_voted')
+        # already voted for this portfolio
+        if request.user.voted_for_day_std_coordinator:
+            messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
+            return redirect('voting:already_voted')
+        # acclamation vote
+        acclamation = True if request.POST.get('acclamation') is not None else False  # noqa
+        no_vote = request.POST.get('no_vote') or None
+        if acclamation and no_vote == "NO":
+            candidate_id = request.POST.get('candidate_id')
+            candidate = Candidate.objects.filter(position__name=PositionName.DSCG.value, id=candidate_id).first()  # noqa
+            if candidate:
+                candidate.no_votes_count += 1
+                candidate.save()
+                request.user.voted_for_day_std_coordinator_g = True
+                vote_for_all(request)
+                request.user.save()
+                return redirect('voting:vote_completed')
+        # no acclamation
+        candidate_id = request.POST.get('candidate_id')
+        candidate = Candidate.objects.filter(
+            position__name=PositionName.DSCB.value, sex=Sex.M.value, id=candidate_id).first()
         # vote
         candidate.vote_count += 1
         candidate.save()
