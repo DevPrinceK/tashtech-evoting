@@ -95,9 +95,9 @@ class DownloadCandidateResultsAsCSVView(View):
 
         writer = csv.writer(response)
         writer.writerow(
-            ['BALLOT NO.', 'POSITION', 'CANDIDATE', 'VOTES COUNT', 'NO VOTES', 'VOTE COUNT %', 'NO VOTES %'])  # noqa
+            ['BALLOT NO.', 'POSITION', 'CANDIDATE', 'VOTES COUNT', 'NO VOTES', 'YES VOTE COUNT %', 'NO VOTES %'])  # noqa
 
-        candidates = Candidate.objects.all().order_by('position__name', 'ballot_number')  # noqa
+        candidates = Candidate.objects.all().order_by('position__precedence', 'ballot_number')  # noqa
         for candidate in candidates:
             writer.writerow(
                 [

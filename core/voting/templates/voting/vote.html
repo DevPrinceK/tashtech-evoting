@@ -40,6 +40,8 @@
                                 <form action="" method="POST">
                                     {% csrf_token %}
                                     <input type="hidden" name="candidate_id" value="{{candidate.id}}">
+                                    <input type="hidden" name="no_vote" value="NO">
+                                    <input type="hidden" name="acclamation" value="1">
                                     <div class="form-group mb-2">
                                         <label for=""> <b>Candidate Name</b></label>
                                         <p>{{candidate.name|upper}}</p>

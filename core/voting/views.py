@@ -755,7 +755,7 @@ class VoteCSGView(View):
         # already voted for this portfolio
         if request.user.voted_for_csg:
             messages.success(request, "Access Denied! You've already voted for this portfolio.")  # noqa
-            return redirect('voting:vote_ppb')
+            return redirect('voting:vote_hspb')
         # acclamation vote
         acclamation = True if request.POST.get('acclamation') is not None else False  # noqa
         no_vote = request.POST.get('no_vote') or None
@@ -767,7 +767,7 @@ class VoteCSGView(View):
                 candidate.save()
                 request.user.voted_for_csg = True
                 request.user.save()
-                return redirect('voting:vote_ppb')
+                return redirect('voting:vote_hspb')
         # no acclamation
         candidate_id = request.POST.get('candidate_id')
         candidate = Candidate.objects.filter(position__name=PositionName.CSG.value, id=candidate_id).first()  # noqa
@@ -1100,6 +1100,8 @@ class VoteDSCGView(View):
         # acclamation vote
         acclamation = True if request.POST.get('acclamation') is not None else False  # noqa
         no_vote = request.POST.get('no_vote') or None
+        print(f"ACCLAMATION: {acclamation}")
+        print(f"NO VOTE: {no_vote}")
         if acclamation and no_vote == "NO":
             candidate_id = request.POST.get('candidate_id')
             candidate = Candidate.objects.filter(position__name=PositionName.DSCG.value, id=candidate_id).first()  # noqa
@@ -1113,7 +1115,7 @@ class VoteDSCGView(View):
         # no acclamation
         candidate_id = request.POST.get('candidate_id')
         candidate = Candidate.objects.filter(
-            position__name=PositionName.DSCB.value, sex=Sex.M.value, id=candidate_id).first()
+            position__name=PositionName.DSCB.value, sex=Sex.F.value, id=candidate_id).first()
         # vote
         candidate.vote_count += 1
         candidate.save()
