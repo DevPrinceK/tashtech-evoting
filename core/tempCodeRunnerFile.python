@@ -1,6 +1,0 @@
-import time
-from xml.dom.minidom import Document
-from random import randint
-
-
-print(randint(1368896, 9999999999))

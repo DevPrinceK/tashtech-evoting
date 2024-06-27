@@ -101,15 +101,29 @@ USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
+# NOTE: NEW STATIC CONFIG
 STATIC_URL = '/static/'
+
 STATIC_ROOT = BASE_DIR / 'staticfiles/'
-MEDIA_ROOT = BASE_DIR / 'assets/'
-MEDIA_URL = '/assets/'
 
 STATICFILES_DIRS = [
-    BASE_DIR / "dist",
     BASE_DIR / "static",
 ]
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / "media"
+
+
+# NOTE: OLD STATIC CONFIG
+# STATIC_URL = '/static/'
+# STATIC_ROOT = BASE_DIR / 'staticfiles/'
+# MEDIA_ROOT = BASE_DIR / 'assets/'
+# MEDIA_URL = '/assets/'
+
+# STATICFILES_DIRS = [
+#     BASE_DIR / "dist",
+#     BASE_DIR / "static",
+# ]
 
 
 # Custom User model
