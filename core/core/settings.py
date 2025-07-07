@@ -9,7 +9,7 @@ SECRET_KEY = 'django-insecure-)@9avr_mc(7#(u!zjx24darf%$bv6++pn3bmw!=1z(^o6r3xhu
 # DEBUG = False
 DEBUG = True
 
-ALLOWED_HOSTS = ['*', '134.122.57.175']
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 INSTALLED_APPS = [
@@ -101,7 +101,6 @@ USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-# NOTE: NEW STATIC CONFIG
 STATIC_URL = '/static/'
 
 STATIC_ROOT = BASE_DIR / 'staticfiles/'
@@ -112,18 +111,6 @@ STATICFILES_DIRS = [
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / "media"
-
-
-# NOTE: OLD STATIC CONFIG
-# STATIC_URL = '/static/'
-# STATIC_ROOT = BASE_DIR / 'staticfiles/'
-# MEDIA_ROOT = BASE_DIR / 'assets/'
-# MEDIA_URL = '/assets/'
-
-# STATICFILES_DIRS = [
-#     BASE_DIR / "dist",
-#     BASE_DIR / "static",
-# ]
 
 
 # Custom User model

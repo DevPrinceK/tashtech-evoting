@@ -1,37 +1,42 @@
-from django.shortcuts import redirect
+from django.db import models
 
 from backend.models import Position
 
 
-def check_already_voted(user):
-    '''Checks if voter has already voted'''
-    if user.voted_for_all:
-        return redirect('voting:already_voted')
-
-
-def vote_for_all(request):
-    '''flags voters who have already voted for all positions'''
-    voter = request.user
-    # if voter.voted_for_sp and voter.voted_for_gp and voter.voted_for_cob and voter.voted_for_cog and voter.voted_for_sgpb and voter.voted_for_sgpg and voter.voted_for_dhpb and voter.voted_for_dhpg and voter.voted_for_ecpb and voter.voted_for_ecpg and voter.voted_for_lpb and voter.voted_for_lpg and voter.voted_for_csb and voter.voted_for_csg and voter.voted_for_hspb and voter.voted_for_hspg and voter.voted_for_hpb and voter.voted_for_hpg:
-    voter.voted_for_all = True
-    voter.save()
-
-
-def get_next_position(request) -> int:
+def get_next_position(request):
     '''
     returns the next position that the voter is
     elegible to vote for.
     '''
     voter = request.user
-    positions = Position.objects.all().order_by("precedence")
+    positions = Position.objects.annotate(num_candidates=models.Count('candidate')).filter(num_candidates__gt=0).order_by("precedence")
     positions_voted_for = voter.total_votes_cast or 0
     total_positions = positions.count()
     next_postion_indx = positions_voted_for + 1
+    is_house_prefect = False
+    print(f"Total positions: {total_positions}, "
+          f"Positions voted for: {positions_voted_for}, "
+          f"Next position index: {next_postion_indx}")
     if next_postion_indx <= total_positions:
         # user can vote for next position
-        return next_postion_indx
+        position_name = positions[next_postion_indx - 1].name
+        if position_name.upper().startswith("HOUSE PREFECT"):
+            # House Prefect position -- filter candidates based on voter's house
+            is_house_prefect = True
+        return next_postion_indx, is_house_prefect
     else:
         # user has voted for all positions
-        return -999
+        return -999, is_house_prefect
 
 
+def get_next_position_name(request) -> str:
+    '''
+    returns the name of the next position that the voter is
+    elegible to vote for.
+    '''
+    next_position_indx = get_next_position(request)
+    if next_position_indx == -999:
+        return "No more positions to vote for"
+    # positions = Position.objects.all().order_by("precedence")
+    positions = Position.objects.annotate(num_candidates=models.Count('candidate')).filter(num_candidates__gt=0).order_by("precedence")
+    return positions[next_position_indx - 1].name  # adjust for zero-based index
