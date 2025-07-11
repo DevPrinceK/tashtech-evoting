@@ -95,7 +95,7 @@ class UploadVotersFromCSV(View):
                     _.sex = column[1]
                     _.user_class = column[2]
                     _.house = column[3]
-                    _.status = column[5]
+                    _.status = column[4]
                     _.external_key = external_key
                     _.save()
                 new_voters += 1
