@@ -82,7 +82,7 @@ class UploadVotersFromCSV(View):
             # create user with custom user manager
             try:
                 _ = User.objects.create_user(
-                    index_number=column[4],
+                    index_number=column[0],
                     password=external_key,
                 )
             except IntegrityError:
@@ -91,11 +91,11 @@ class UploadVotersFromCSV(View):
             else:
                 # update user with other relevant data after creating
                 if _:
-                    _.fullname = column[0]
-                    _.sex = column[1]
-                    _.user_class = column[2]
-                    _.house = column[3]
-                    _.status = column[4]
+                    _.fullname = column[1]
+                    _.sex = column[2]
+                    _.user_class = column[3]
+                    _.house = column[4]
+                    _.status = column[5]
                     _.external_key = external_key
                     _.save()
                 new_voters += 1
